@@ -1,13 +1,12 @@
 package com.acme.edu.iteration03;
 
-import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.io.IOException;
 
 public class LoggerTest implements SysoutCaptureAndAssertionAbility {
+
     //region given
     @Before
     public void setUpSystemOut() throws IOException {
