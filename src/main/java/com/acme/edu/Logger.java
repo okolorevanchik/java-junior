@@ -175,14 +175,23 @@ public class Logger {
 
     private static void printPrimitiveNumber(int message, int maxValue) {
         if (message != ZERO_VALUE && message < maxValue) {
+            int temp = sum;
             sum += message;
+            if (sum < temp && message > 0) {
+                print("primitive: " + temp);
+                sum = message;
+            }
         } else if (message == maxValue) {
             print("primitive: " + sum);
             print("primitive: " + maxValue);
             sum = 0;
+        } else if (sum == 0) {
+            print("primitive: 0");
         } else {
             print("primitive: " + message);
         }
+
+
     }
 
     private static void printLastString() {
