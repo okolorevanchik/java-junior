@@ -1,23 +1,17 @@
 package com.acme.edu;
 
+/**
+ * Class Logger implemented logging function.
+ * @autor Tolchinskiy Dmitriy
+ */
 public class Logger {
 
-    private static final String PRIMITIVE = "primitive: ";
-
     /**
-     * Prints an integer and then terminate the line.
+     * Prints an integer number and then terminate the line.
      * @param message The int to be printed.
      */
     public static void log(int message) {
-        consoleWriter(PRIMITIVE + message);
-    }
-
-    /**
-     * Prints an boolean and then terminate the line.
-     * @param message The boolean to be printed.
-     */
-    public static void log(boolean message) {
-        consoleWriter(PRIMITIVE + message);
+        print("primitive: " + message);
     }
 
     /**
@@ -25,10 +19,27 @@ public class Logger {
      * @param message The char to be printed.
      */
     public static void log(char message) {
-        consoleWriter("char: " + message);
+        print("char: " + message);
     }
 
-    private static void consoleWriter(String str) {
-        System.out.println(str);
+    /**
+     * Prints an string and then terminate the line.
+     * @param message The string to be printed.
+     */
+    public static void log(String message) {
+        print("string: " + message);
     }
+
+    /**
+     * Prints an result toString() method Object class and then terminate the line.
+     * @param message The string to be printed.
+     */
+    public static void log(Object message) {
+        print("reference: " +message.toString());
+    }
+
+    private static void print(String message) {
+        System.out.println(message);
+    }
+
 }
