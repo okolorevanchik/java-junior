@@ -69,9 +69,13 @@ public class Logger {
      *
      * @param messages The array to be  printed.
      */
-    public static void log(int[] messages) {
+    public static void log(int... messages) {
         close();
-        print("primitives array: " + getArrayStringMessage(messages));
+        int sumOfNumbersInArray = 0;
+        for (int message : messages) {
+            sumOfNumbersInArray += message;
+        }
+        print(String.valueOf(sumOfNumbersInArray));
     }
 
     /**
@@ -110,6 +114,18 @@ public class Logger {
             print("}");
         }
         print("}");
+    }
+
+    /**
+     * Later...
+     *
+     * @param messages The strings to be printed.
+     */
+    public static void log(String... messages) {
+        close();
+        for (String message: messages) {
+            print(message);
+        }
     }
 
     /**
