@@ -7,6 +7,8 @@ package com.acme.edu;
  */
 public class Logger {
 
+    private static final int ZERO_VALUE = 0;
+
     private static int sum;
     private static String lastString = "";
     private static int count = 1;
@@ -17,33 +19,18 @@ public class Logger {
      * @param message The int to be printed.
      */
     public static void log(int message) {
-        printLastString();
-        lastString = "";
-
-        if (message != 0 && message != Integer.MAX_VALUE)
-            sum += message;
-        else if (message == Integer.MAX_VALUE) {
-            print("primitive: " + sum);
-            sum = 0;
-            print("primitive: " + Integer.MAX_VALUE);
-        } else print("primitive: " + message);
-
+        printLastStringAndPrimitiveNumber(message, Integer.MAX_VALUE);
     }
 
-
+    /**
+     * Prints an byte number and then terminate the line.
+     *
+     * @param message The int to be printed.
+     */
     public static void log(byte message) {
-        printLastString();
-        lastString = "";
-
-        if (message != 0 && message != Byte.MAX_VALUE)
-            sum += message;
-        else if (message == Byte.MAX_VALUE) {
-            print("primitive: " + sum);
-            sum = 0;
-            print("primitive: " + Byte.MAX_VALUE);
-        } else print("primitive: " + message);
-
+        printLastStringAndPrimitiveNumber(message, Byte.MAX_VALUE);
     }
+
 
     /**
      * Prints an character and then terminate the line.
@@ -51,12 +38,17 @@ public class Logger {
      * @param message The char to be printed.
      */
     public static void log(char message) {
-        printSum();
+        close();
         print("char: " + message);
     }
 
+    /**
+     * Prints an boolean and then terminate the line.
+     *
+     * @param message The boolean to be printed.
+     */
     public static void log(boolean message) {
-        printSum();
+        close();
         print("primitive: " + message);
     }
 
@@ -67,13 +59,7 @@ public class Logger {
      */
     public static void log(String message) {
         printSum();
-
-        if (lastString.isEmpty()) lastString = message;
-        else if (lastString.equals(message)) count++;
-        else {
-            printLastString();
-            lastString = message;
-        }
+        setNewLastStringAndPrintLastString(message);
     }
 
     /**
@@ -82,32 +68,63 @@ public class Logger {
      * @param message The string to be printed.
      */
     public static void log(Object message) {
-        printSum();
+        close();
         print("reference: " + message.toString());
     }
 
+    /**
+     *
+     */
     public static void close() {
-        if (!lastString.isEmpty()) {
+        printSum();
+        printLastString();
+    }
+
+    private static void printLastStringAndPrimitiveNumber(int message, int maxValue) {
+        printLastString();
+        printPrimitiveNumber(message, maxValue);
+    }
+
+    private static void setNewLastStringAndPrintLastString(String message) {
+        if (lastString.isEmpty()) {
+            lastString = message;
+        } else if (lastString.equals(message)) {
+            count++;
+        } else {
             printLastString();
-            lastString = "";
+            lastString = message;
+        }
+    }
+
+    private static void printPrimitiveNumber(int message, int maxValue) {
+        if (message != ZERO_VALUE && message < maxValue) {
+            sum += message;
+        } else if (message == maxValue) {
+            print("primitive: " + sum);
+            print("primitive: " + maxValue);
+            sum = 0;
+        } else {
+            print("primitive: " + message);
         }
     }
 
     private static void printLastString() {
-        if (!lastString.isEmpty()) {
-            if (count > 1)
-                print("string: " + lastString + " (x" + count + ")");
-            else print("string: " + lastString);
+        if (lastString.isEmpty()) return;
 
+        if (count > 1) {
+            print(String.format("string: %s (x%d)", lastString, count));
             count = 1;
+        } else {
+            print("string: " + lastString);
         }
+        lastString = "";
+
     }
 
     private static void printSum() {
-        if (sum != 0) {
-            print("primitive: " + sum);
-            sum = 0;
-        }
+        if (sum == 0) return;
+        print("primitive: " + sum);
+        sum = 0;
     }
 
     private static void print(String message) {
