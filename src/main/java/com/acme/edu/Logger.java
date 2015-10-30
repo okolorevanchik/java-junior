@@ -15,8 +15,14 @@ public class Logger {
      * @param message The int to be printed.
      */
     public static void log(int message) {
-        if (message != 0) SUM += message;
-        else print("primitive: " + message);
+        if (message != 0 && message != Integer.MAX_VALUE) SUM += message;
+        else if (message == Integer.MAX_VALUE) {
+            print("primitive: " + SUM);
+            SUM = 0;
+            print("primitive: " + Integer.MAX_VALUE);
+        } else {
+            print("primitive: " + message);
+        }
     }
 
     public static void log(byte message) {
@@ -61,7 +67,10 @@ public class Logger {
     }
 
     private static void isSumNull() {
-        if (SUM != 0) print("primitive: " + SUM);
+        if (SUM != 0) {
+            print("primitive: " + SUM);
+            SUM = 0;
+        }
     }
 
     private static void print(String message) {
