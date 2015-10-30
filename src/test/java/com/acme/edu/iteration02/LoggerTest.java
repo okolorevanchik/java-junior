@@ -1,6 +1,7 @@
 package com.acme.edu.iteration02;
 
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
+import org.junit.After;
 import org.junit.Before;
 
 import java.io.IOException;
@@ -14,6 +15,10 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
     //endregion
 
+    @After
+    public void setUpResetOut() throws IOException {
+        resetOut();
+    }
 
     /*
     TODO: implement Logger solution to match specification as tests

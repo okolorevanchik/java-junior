@@ -20,4 +20,8 @@ public interface SysoutCaptureAndAssertionAbility {
     default void assertSysoutContains(String expected) {
         assertThat(OUT.toString()).contains(expected);
     }
+
+    default void resetOut() {
+        OUT.reset();
+    }
 }

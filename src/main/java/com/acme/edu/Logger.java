@@ -2,12 +2,14 @@ package com.acme.edu;
 
 /**
  * Class Logger implemented logging function.
+ *
  * @autor Tolchinskiy Dmitriy
  */
 public class Logger {
 
     /**
      * Prints an integer number and then terminate the line.
+     *
      * @param message The int to be printed.
      */
     public static void log(int message) {
@@ -16,6 +18,7 @@ public class Logger {
 
     /**
      * Prints an character and then terminate the line.
+     *
      * @param message The char to be printed.
      */
     public static void log(char message) {
@@ -24,6 +27,7 @@ public class Logger {
 
     /**
      * Prints an string and then terminate the line.
+     *
      * @param message The string to be printed.
      */
     public static void log(String message) {
@@ -32,10 +36,11 @@ public class Logger {
 
     /**
      * Prints an result toString() method Object class and then terminate the line.
+     *
      * @param message The string to be printed.
      */
     public static void log(Object message) {
-        print("reference: " +message.toString());
+        print("reference: " + message.toString());
     }
 
     private static void print(String message) {
