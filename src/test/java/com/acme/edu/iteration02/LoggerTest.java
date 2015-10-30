@@ -32,14 +32,15 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         Logger.log(2);
         Logger.log("str 2");
         Logger.log(0);
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutEquals(
-            "str 1" + SEP +
-            "primitive: 3" + SEP +
-            "str 2" + SEP +
-            "primitive: 0" + SEP
+                "string: str 1" + SEP +
+                        "primitive: 3" + SEP +
+                        "string: str 2" + SEP +
+                        "primitive: 0" + SEP
         );
         //endregion
     }
@@ -53,15 +54,16 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         Logger.log(Integer.MAX_VALUE);
         Logger.log("str 2");
         Logger.log(0);
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutEquals(
-            "str 1" + SEP +
-            "primitive: 10" + SEP +
-            "primitive: " + Integer.MAX_VALUE + SEP +
-            "str 2" + SEP +
-            "primitive: 0" + SEP
+                "string: str 1" + SEP +
+                        "primitive: 10" + SEP +
+                        "primitive: " + Integer.MAX_VALUE + SEP +
+                        "string: str 2" + SEP +
+                        "primitive: 0" + SEP
         );
         //endregion
     }
@@ -70,23 +72,24 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     public void shouldLogCorrectlyByteOverflowWhenSequentBytes() {
         //region when
         Logger.log("str 1");
-        Logger.log((byte)10);
-        Logger.log((byte)Byte.MAX_VALUE);
+        Logger.log((byte) 10);
+        Logger.log(Byte.MAX_VALUE);
         Logger.log("str 2");
         Logger.log(0);
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutEquals(
-            "str 1" + SEP +
-            "primitive: 10" + SEP +
-            "primitive: " + Byte.MAX_VALUE + SEP +
-            "str 2" + SEP +
-            "primitive: 0" + SEP
+                "string: str 1" + SEP +
+                        "primitive: 10" + SEP +
+                        "primitive: " + Byte.MAX_VALUE + SEP +
+                        "string: str 2" + SEP +
+                        "primitive: 0" + SEP
         );
         //endregion
     }
-/*
+
     @Test
     public void shouldLogSameSubsequentStringsWithoutRepeat() throws IOException {
         //region when
@@ -98,18 +101,18 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         Logger.log("str 3");
         Logger.log("str 3");
         Logger.log("str 3");
+        Logger.close();
         //endregion
 
         //region then
         assertSysoutEquals(
-            "str 1" + SEP +
-            "str 2 (x2)" + SEP +
-            "0" + SEP +
-            "str 2" + SEP +
-            "str 3 (x3)" + SEP
+                "string: str 1" + SEP +
+                        "string: str 2 (x2)" + SEP +
+                        "primitive: 0" + SEP +
+                        "string: str 2" + SEP +
+                        "string: str 3 (x3)" + SEP
         );
         //endregion
     }
 
-    */
 }
