@@ -1,5 +1,7 @@
 package com.acme.edu;
 
+import java.util.Arrays;
+
 /**
  * Class Logger implemented logging function.
  *
@@ -73,11 +75,40 @@ public class Logger {
     }
 
     /**
+     * Returns a string representation of the integer.
      *
+     * @param messages The array to be  printed.
+     */
+    public static void log(int[] messages) {
+        close();
+        print("primitives array: " + getArrayStringMessage(messages));
+    }
+
+
+
+    public static void log(int[][] arrayMessages) {
+        close();
+        print("primitives matrix: {");
+        printArray(arrayMessages);
+        print("}");
+    }
+
+    /**
+     * Later...
      */
     public static void close() {
         printSum();
         printLastString();
+    }
+
+    private static void printArray(int[][] arrayMessages) {
+        for (int[] arrayMessage : arrayMessages) {
+            print(getArrayStringMessage(arrayMessage));
+        }
+    }
+
+    private static String getArrayStringMessage(int[] messages) {
+        return Arrays.toString(messages).replace("[", "{").replace("]", "}");
     }
 
     private static void printLastStringAndPrimitiveNumber(int message, int maxValue) {
@@ -134,5 +165,4 @@ public class Logger {
     private static void print(String message) {
         System.out.println(message);
     }
-
 }
