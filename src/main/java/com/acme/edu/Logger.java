@@ -109,7 +109,9 @@ public class Logger {
     }
 
     private static void printLastString() {
-        if (lastString.isEmpty()) return;
+        if (lastString.isEmpty()) {
+            return;
+        }
 
         if (count > 1) {
             print(String.format("string: %s (x%d)", lastString, count));
@@ -122,7 +124,9 @@ public class Logger {
     }
 
     private static void printSum() {
-        if (sum == 0) return;
+        if (sum == 0) {
+            return;
+        }
         print("primitive: " + sum);
         sum = 0;
     }
