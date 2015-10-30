@@ -65,16 +65,6 @@ public class Logger {
     }
 
     /**
-     * Prints an result toString() method Object class and then terminate the line.
-     *
-     * @param message The string to be printed.
-     */
-    public static void log(Object message) {
-        close();
-        print("reference: " + message.toString());
-    }
-
-    /**
      * Returns a string representation of the integer.
      *
      * @param messages The array to be  printed.
@@ -84,14 +74,54 @@ public class Logger {
         print("primitives array: " + getArrayStringMessage(messages));
     }
 
-
-
-    public static void log(int[][] arrayMessages) {
+    /**
+     * Later...
+     *
+     * @param matrixMessages The matrix to be printed.
+     */
+    public static void log(int[][] matrixMessages) {
         close();
         print("primitives matrix: {");
-        printArray(arrayMessages);
+        printMax(matrixMessages);
         print("}");
     }
+
+    /**
+     * Later...
+     *
+     * @param multimatrixMessages The multimatrix to be printed.
+     */
+    public static void log(int[][][][] multimatrixMessages) {
+        close();
+        print("primitives multimatrix: {");
+        for (int[][][] multimatrix : multimatrixMessages) {
+            print("{");
+            for (int[][] matrix : multimatrix) {
+                print("{");
+                for (int[] array : matrix) {
+                    print("{");
+                    for (int number : array) {
+                        print(String.valueOf(number));
+                    }
+                    print("}");
+                }
+                print("}");
+            }
+            print("}");
+        }
+        print("}");
+    }
+
+    /**
+     * Prints an result toString() method Object class and then terminate the line.
+     *
+     * @param message The string to be printed.
+     */
+    public static void log(Object message) {
+        close();
+        print("reference: " + message.toString());
+    }
+
 
     /**
      * Later...
@@ -101,7 +131,7 @@ public class Logger {
         printLastString();
     }
 
-    private static void printArray(int[][] arrayMessages) {
+    private static void printMax(int[][] arrayMessages) {
         for (int[] arrayMessage : arrayMessages) {
             print(getArrayStringMessage(arrayMessage));
         }
