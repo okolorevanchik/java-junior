@@ -26,8 +26,14 @@ public class Logger {
     }
 
     public static void log(byte message) {
-        isSumNull();
-        print("primitive: " + message);
+        if (message != 0 && message != Byte.MAX_VALUE) SUM += message;
+        else if (message == Byte.MAX_VALUE) {
+            print("primitive: " + SUM);
+            SUM = 0;
+            print("primitive: " + Byte.MAX_VALUE);
+        } else {
+            print("primitive: " + message);
+        }
     }
 
     /**
