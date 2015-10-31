@@ -3,31 +3,48 @@ package com.acme.edu;
 import java.util.Arrays;
 
 /**
- * Class Logger implemented logging function.
+ * Logger class provides functions for logging data.
+ * For correct processing and the withdrawal of all
+ * accumulated data, before the end of the work to
+ * the class must call {@link #close()}.
+ * <p>
+ * Example:
+ * <p>
+ * <code>public void someMethod() {
+ * Logger.log("str 1");
+ * Logger.log(1);
+ * Logger.log(2);
+ * Logger.log("str 2");
+ * Logger.log(0);
+ * Logger.close();
+ * }</code>
  *
  * @autor Tolchinskiy Dmitriy
  */
 public class Logger {
 
     private static final int ZERO_VALUE = 0;
+    private static final int ONE_VALUE = 1;
 
     private static int sum;
     private static String lastString = "";
     private static int count = 1;
 
     /**
-     * Prints an integer number and then terminate the line.
+     * Method triggers summing the numbers applied
+     * to the input and output in the console.
      *
-     * @param message The int to be printed.
+     * @param message The int to be summing or printed.
      */
     public static void log(int message) {
         printLastStringAndPrimitiveNumber(message, Integer.MAX_VALUE);
     }
 
     /**
-     * Prints an byte number and then terminate the line.
+     * The function of the method is similar to the
+     * method {@link #log(int)}.
      *
-     * @param message The int to be printed.
+     * @param message The byte to be summing or printed.
      */
     public static void log(byte message) {
         printLastStringAndPrimitiveNumber(message, Byte.MAX_VALUE);
@@ -35,27 +52,25 @@ public class Logger {
 
 
     /**
-     * Prints an character and then terminate the line.
+     * Displays character in the console.
      *
      * @param message The char to be printed.
      */
     public static void log(char message) {
-        close();
         print("char: " + message);
     }
 
     /**
-     * Prints an boolean and then terminate the line.
+     * Displays boolean value in the console.
      *
      * @param message The boolean to be printed.
      */
     public static void log(boolean message) {
-        close();
         print("primitive: " + message);
     }
 
     /**
-     * Prints an string and then terminate the line.
+     * Displays string in the console.
      *
      * @param message The string to be printed.
      */
@@ -65,13 +80,12 @@ public class Logger {
     }
 
     /**
-     * Returns a string representation of the integer.
+     * Displays string representation of integers.
      *
-     * @param messages The array to be  printed.
+     * @param messages The array integers to be printed.
      */
     public static void log(int... messages) {
-        close();
-        int sumOfNumbersInArray = 0;
+        int sumOfNumbersInArray = ZERO_VALUE;
         for (int message : messages) {
             sumOfNumbersInArray += message;
         }
@@ -79,25 +93,58 @@ public class Logger {
     }
 
     /**
-     * Later...
+     * Displays matrix representation of integers.
      *
      * @param matrixMessages The matrix to be printed.
      */
     public static void log(int[][] matrixMessages) {
-        close();
         print("primitives matrix: {");
-        printMax(matrixMessages);
+        printMatrix(matrixMessages);
         print("}");
     }
 
     /**
-     * Later...
+     * Displays multimatrix representation of integers.
      *
      * @param multimatrixMessages The multimatrix to be printed.
      */
     public static void log(int[][][][] multimatrixMessages) {
-        close();
         print("primitives multimatrix: {");
+        printMultimatrix(multimatrixMessages);
+        print("}");
+    }
+
+    /**
+     * It displays the console strings.
+     *
+     * @param messages The strings to be printed.
+     */
+    public static void log(String... messages) {
+        for (String message : messages) {
+            print(message);
+        }
+    }
+
+    /**
+     * Prints an result toString() method Object class in console.
+     *
+     * @param message The object reference to be printed.
+     */
+    public static void log(Object message) {
+        print("reference: " + message.toString());
+    }
+
+
+    /**
+     * Displays the residual data to the console.
+     * Called before the cessation of work with logger.
+     */
+    public static void close() {
+        printSum();
+        printLastString();
+    }
+
+    private static void printMultimatrix(int[][][][] multimatrixMessages) {
         for (int[][][] multimatrix : multimatrixMessages) {
             print("{");
             for (int[][] matrix : multimatrix) {
@@ -113,48 +160,16 @@ public class Logger {
             }
             print("}");
         }
-        print("}");
     }
 
-    /**
-     * Later...
-     *
-     * @param messages The strings to be printed.
-     */
-    public static void log(String... messages) {
-        close();
-        for (String message: messages) {
-            print(message);
-        }
-    }
-
-    /**
-     * Prints an result toString() method Object class and then terminate the line.
-     *
-     * @param message The string to be printed.
-     */
-    public static void log(Object message) {
-        close();
-        print("reference: " + message.toString());
-    }
-
-
-    /**
-     * Later...
-     */
-    public static void close() {
-        printSum();
-        printLastString();
-    }
-
-    private static void printMax(int[][] arrayMessages) {
+    private static void printMatrix(int[][] arrayMessages) {
         for (int[] arrayMessage : arrayMessages) {
-            print(getArrayStringMessage(arrayMessage));
+            String arrayStringMessage = Arrays
+                    .toString(arrayMessage)
+                    .replace("[", "{")
+                    .replace("]", "}");
+            print(arrayStringMessage);
         }
-    }
-
-    private static String getArrayStringMessage(int[] messages) {
-        return Arrays.toString(messages).replace("[", "{").replace("]", "}");
     }
 
     private static void printLastStringAndPrimitiveNumber(int message, int maxValue) {
@@ -163,9 +178,7 @@ public class Logger {
     }
 
     private static void setNewLastStringAndPrintLastString(String message) {
-        if (lastString.isEmpty()) {
-            lastString = message;
-        } else if (lastString.equals(message)) {
+        if (lastString.equals(message)) {
             count++;
         } else {
             printLastString();
@@ -175,23 +188,25 @@ public class Logger {
 
     private static void printPrimitiveNumber(int message, int maxValue) {
         if (message != ZERO_VALUE && message < maxValue) {
-            int temp = sum;
-            sum += message;
-            if (sum < temp && message > 0) {
-                print("primitive: " + temp);
-                sum = message;
-            }
+            summing(message);
         } else if (message == maxValue) {
             print("primitive: " + sum);
             print("primitive: " + maxValue);
-            sum = 0;
-        } else if (sum == 0) {
-            print("primitive: 0");
+            sum = ZERO_VALUE;
+        } else if (sum == ZERO_VALUE) {
+            print("primitive: " + ZERO_VALUE);
         } else {
             print("primitive: " + message);
         }
+    }
 
-
+    private static void summing(int message) {
+        int temp = sum;
+        sum += message;
+        if (sum < temp && message > ZERO_VALUE) {
+            print("primitive: " + temp);
+            sum = message;
+        }
     }
 
     private static void printLastString() {
@@ -199,9 +214,9 @@ public class Logger {
             return;
         }
 
-        if (count > 1) {
+        if (count > ONE_VALUE) {
             print(String.format("string: %s (x%d)", lastString, count));
-            count = 1;
+            count = ONE_VALUE;
         } else {
             print("string: " + lastString);
         }
@@ -210,11 +225,11 @@ public class Logger {
     }
 
     private static void printSum() {
-        if (sum == 0) {
+        if (sum == ZERO_VALUE) {
             return;
         }
         print("primitive: " + sum);
-        sum = 0;
+        sum = ZERO_VALUE;
     }
 
     private static void print(String message) {
