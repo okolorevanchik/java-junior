@@ -148,24 +148,27 @@ public class Logger {
         for (int[][][] multimatrix : multimatrixMessages) {
             print("{");
             for (int[][] matrix : multimatrix) {
-                print("{");
-                for (int[] array : matrix) {
-                    print("{");
-                    for (int number : array) {
-                        print(String.valueOf(number));
-                    }
-                    print("}");
-                }
-                print("}");
+                printInnerMatrix(matrix);
             }
             print("}");
         }
     }
 
+    private static void printInnerMatrix(int[][] matrix) {
+        print("{");
+        for (int[] array : matrix) {
+            print("{");
+            for (int number : array) {
+                print(String.valueOf(number));
+            }
+            print("}");
+        }
+        print("}");
+    }
+
     private static void printMatrix(int[][] arrayMessages) {
         for (int[] arrayMessage : arrayMessages) {
-            String arrayStringMessage = Arrays
-                    .toString(arrayMessage)
+            String arrayStringMessage = Arrays.toString(arrayMessage)
                     .replace("[", "{")
                     .replace("]", "}");
             print(arrayStringMessage);
