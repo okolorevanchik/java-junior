@@ -1,7 +1,5 @@
 package com.acme.edu;
 
-import java.util.Arrays;
-
 /**
  * Logger class provides functions for logging data.
  * For correct processing and the withdrawal of all
@@ -23,8 +21,15 @@ import java.util.Arrays;
  */
 public class Logger {
 
-    private static final int ZERO_VALUE = 0;
-    private static final int ONE_VALUE = 1;
+    private static final String OPEN_BRACKET = "{";
+    private static final String CLOSE_BRACKET = "}";
+    private static final String PRIMITIVE_PREFIX = "primitive: ";
+    private static final String CHAR_PREFIX = "char: ";
+    private static final String PRIMITIVES_MATRIX_PREFIX = "primitives matrix: ";
+    private static final String PRIMITIVES_MULTIMATRIX_PREFIX = "primitives multimatrix: ";
+    private static final String REFERENCE_PREFIX = "reference: ";
+    private static final String STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX = "string: %s (x%d)";
+    private static final String STRING_PREFIX = "string: ";
 
     private static int sum;
     private static String lastString = "";
@@ -57,7 +62,7 @@ public class Logger {
      * @param message The char to be printed.
      */
     public static void log(char message) {
-        print("char: " + message);
+        print(CHAR_PREFIX + message);
     }
 
     /**
@@ -66,7 +71,7 @@ public class Logger {
      * @param message The boolean to be printed.
      */
     public static void log(boolean message) {
-        print("primitive: " + message);
+        print(PRIMITIVE_PREFIX + message);
     }
 
     /**
@@ -85,7 +90,7 @@ public class Logger {
      * @param messages The array integers to be printed.
      */
     public static void log(int... messages) {
-        int sumOfNumbersInArray = ZERO_VALUE;
+        int sumOfNumbersInArray = 0;
         for (int message : messages) {
             sumOfNumbersInArray += message;
         }
@@ -98,9 +103,9 @@ public class Logger {
      * @param matrixMessages The matrix to be printed.
      */
     public static void log(int[][] matrixMessages) {
-        print("primitives matrix: {");
+        print(PRIMITIVES_MATRIX_PREFIX + OPEN_BRACKET);
         printMatrix(matrixMessages);
-        print("}");
+        print(CLOSE_BRACKET);
     }
 
     /**
@@ -109,9 +114,9 @@ public class Logger {
      * @param multimatrixMessages The multimatrix to be printed.
      */
     public static void log(int[][][][] multimatrixMessages) {
-        print("primitives multimatrix: {");
+        print(PRIMITIVES_MULTIMATRIX_PREFIX + OPEN_BRACKET);
         printMultimatrix(multimatrixMessages);
-        print("}");
+        print(CLOSE_BRACKET);
     }
 
     /**
@@ -131,7 +136,7 @@ public class Logger {
      * @param message The object reference to be printed.
      */
     public static void log(Object message) {
-        print("reference: " + message.toString());
+        print(REFERENCE_PREFIX + message.toString());
     }
 
 
@@ -146,32 +151,34 @@ public class Logger {
 
     private static void printMultimatrix(int[][][][] multimatrixMessages) {
         for (int[][][] multimatrix : multimatrixMessages) {
-            print("{");
+            print(OPEN_BRACKET);
             for (int[][] matrix : multimatrix) {
                 printInnerMatrix(matrix);
             }
-            print("}");
+            print(CLOSE_BRACKET);
         }
     }
 
     private static void printInnerMatrix(int[][] matrix) {
-        print("{");
+        print(OPEN_BRACKET);
         for (int[] array : matrix) {
-            print("{");
+            print(OPEN_BRACKET);
             for (int number : array) {
                 print(String.valueOf(number));
             }
-            print("}");
+            print(CLOSE_BRACKET);
         }
-        print("}");
+        print(CLOSE_BRACKET);
     }
 
     private static void printMatrix(int[][] arrayMessages) {
         for (int[] arrayMessage : arrayMessages) {
-            String arrayStringMessage = Arrays.toString(arrayMessage)
-                    .replace("[", "{")
-                    .replace("]", "}");
-            print(arrayStringMessage);
+            StringBuilder oneStringArray = new StringBuilder(OPEN_BRACKET);
+            for (int message: arrayMessage) {
+                oneStringArray.append(message).append(", ");
+            }
+            oneStringArray.replace(oneStringArray.length() - 2, oneStringArray.length(), "}");
+            print(oneStringArray.toString());
         }
     }
 
@@ -190,24 +197,24 @@ public class Logger {
     }
 
     private static void printPrimitiveNumber(int message, int maxValue) {
-        if (message != ZERO_VALUE && message < maxValue) {
+        if (message != 0 && message < maxValue) {
             summing(message);
         } else if (message == maxValue) {
-            print("primitive: " + sum);
-            print("primitive: " + maxValue);
-            sum = ZERO_VALUE;
-        } else if (sum == ZERO_VALUE) {
-            print("primitive: " + ZERO_VALUE);
+            print(PRIMITIVE_PREFIX + sum);
+            print(PRIMITIVE_PREFIX + maxValue);
+            sum = 0;
+        } else if (sum == 0) {
+            print(PRIMITIVE_PREFIX + 0);
         } else {
-            print("primitive: " + message);
+            print(PRIMITIVE_PREFIX + message);
         }
     }
 
     private static void summing(int message) {
         int temp = sum;
         sum += message;
-        if (sum < temp && message > ZERO_VALUE) {
-            print("primitive: " + temp);
+        if (sum < temp && message > 0) {
+            print(PRIMITIVE_PREFIX + temp);
             sum = message;
         }
     }
@@ -217,22 +224,22 @@ public class Logger {
             return;
         }
 
-        if (count > ONE_VALUE) {
-            print(String.format("string: %s (x%d)", lastString, count));
-            count = ONE_VALUE;
+        if (count > 1) {
+            print(String.format(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, lastString, count));
+            count = 1;
         } else {
-            print("string: " + lastString);
+            print(STRING_PREFIX + lastString);
         }
         lastString = "";
 
     }
 
     private static void printSum() {
-        if (sum == ZERO_VALUE) {
+        if (sum == 0) {
             return;
         }
-        print("primitive: " + sum);
-        sum = ZERO_VALUE;
+        print(PRIMITIVE_PREFIX + sum);
+        sum = 0;
     }
 
     private static void print(String message) {
