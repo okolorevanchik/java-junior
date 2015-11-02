@@ -31,8 +31,8 @@ public class Logger {
     private static final String STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX = "string: %s (x%d)";
     private static final String STRING_PREFIX = "string: ";
 
-    private static int sum;
-    private static String lastString = "";
+    private static int numberBuffer;
+    private static String stringBuffer = "";
     private static int count = 1;
 
     /**
@@ -42,7 +42,7 @@ public class Logger {
      * @param message The int to be summing or printed.
      */
     public static void log(int message) {
-        printLastStringAndPrimitiveNumber(message, Integer.MAX_VALUE);
+        printStringBufferAndPrimitiveNumber(message, Integer.MAX_VALUE);
     }
 
     /**
@@ -52,7 +52,7 @@ public class Logger {
      * @param message The byte to be summing or printed.
      */
     public static void log(byte message) {
-        printLastStringAndPrimitiveNumber(message, Byte.MAX_VALUE);
+        printStringBufferAndPrimitiveNumber(message, Byte.MAX_VALUE);
     }
 
 
@@ -80,8 +80,8 @@ public class Logger {
      * @param message The string to be printed.
      */
     public static void log(String message) {
-        printSum();
-        setNewLastStringAndPrintLastString(message);
+        printNumberBuffer();
+        setNewStringBufferAndPrintLastStringBuffer(message);
     }
 
     /**
@@ -145,26 +145,16 @@ public class Logger {
      * Called before the cessation of work with logger.
      */
     public static void close() {
-        printSum();
-        printLastString();
+        printNumberBuffer();
+        printStringBuffer();
     }
 
     private static void printMultimatrix(int[][][][] multimatrixMessages) {
+        print(OPEN_BRACKET);
         for (int[][][] multimatrix : multimatrixMessages) {
             print(OPEN_BRACKET);
             for (int[][] matrix : multimatrix) {
-                printInnerMatrix(matrix);
-            }
-            print(CLOSE_BRACKET);
-        }
-    }
-
-    private static void printInnerMatrix(int[][] matrix) {
-        print(OPEN_BRACKET);
-        for (int[] array : matrix) {
-            print(OPEN_BRACKET);
-            for (int number : array) {
-                print(String.valueOf(number));
+                printMatrix(matrix);
             }
             print(CLOSE_BRACKET);
         }
@@ -174,25 +164,25 @@ public class Logger {
     private static void printMatrix(int[][] arrayMessages) {
         for (int[] arrayMessage : arrayMessages) {
             StringBuilder oneStringArray = new StringBuilder(OPEN_BRACKET);
-            for (int message: arrayMessage) {
+            for (int message : arrayMessage) {
                 oneStringArray.append(message).append(", ");
             }
-            oneStringArray.replace(oneStringArray.length() - 2, oneStringArray.length(), "}");
+            oneStringArray.replace(oneStringArray.length() - 2, oneStringArray.length(), CLOSE_BRACKET);
             print(oneStringArray.toString());
         }
     }
 
-    private static void printLastStringAndPrimitiveNumber(int message, int maxValue) {
-        printLastString();
+    private static void printStringBufferAndPrimitiveNumber(int message, int maxValue) {
+        printStringBuffer();
         printPrimitiveNumber(message, maxValue);
     }
 
-    private static void setNewLastStringAndPrintLastString(String message) {
-        if (lastString.equals(message)) {
+    private static void setNewStringBufferAndPrintLastStringBuffer(String message) {
+        if (stringBuffer.equals(message)) {
             count++;
         } else {
-            printLastString();
-            lastString = message;
+            printStringBuffer();
+            stringBuffer = message;
         }
     }
 
@@ -200,10 +190,10 @@ public class Logger {
         if (message != 0 && message < maxValue) {
             summing(message);
         } else if (message == maxValue) {
-            print(PRIMITIVE_PREFIX + sum);
+            print(PRIMITIVE_PREFIX + numberBuffer);
             print(PRIMITIVE_PREFIX + maxValue);
-            sum = 0;
-        } else if (sum == 0) {
+            numberBuffer = 0;
+        } else if (numberBuffer == 0) {
             print(PRIMITIVE_PREFIX + 0);
         } else {
             print(PRIMITIVE_PREFIX + message);
@@ -211,35 +201,35 @@ public class Logger {
     }
 
     private static void summing(int message) {
-        int temp = sum;
-        sum += message;
-        if (sum < temp && message > 0) {
+        int temp = numberBuffer;
+        numberBuffer += message;
+        if (numberBuffer < temp && message > 0) {
             print(PRIMITIVE_PREFIX + temp);
-            sum = message;
+            numberBuffer = message;
         }
     }
 
-    private static void printLastString() {
-        if (lastString.isEmpty()) {
+    private static void printStringBuffer() {
+        if (stringBuffer.isEmpty()) {
             return;
         }
 
         if (count > 1) {
-            print(String.format(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, lastString, count));
+            print(String.format(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, stringBuffer, count));
             count = 1;
         } else {
-            print(STRING_PREFIX + lastString);
+            print(STRING_PREFIX + stringBuffer);
         }
-        lastString = "";
+        stringBuffer = "";
 
     }
 
-    private static void printSum() {
-        if (sum == 0) {
+    private static void printNumberBuffer() {
+        if (numberBuffer == 0) {
             return;
         }
-        print(PRIMITIVE_PREFIX + sum);
-        sum = 0;
+        print(PRIMITIVE_PREFIX + numberBuffer);
+        numberBuffer = 0;
     }
 
     private static void print(String message) {
