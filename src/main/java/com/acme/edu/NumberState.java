@@ -21,15 +21,15 @@ public class NumberState extends State {
 
     @Override
     protected void magic(String message) {
-        int integerMessage = Integer.parseInt(message);
-        if (integerMessage != 0 && integerMessage < Integer.MAX_VALUE) {
-            summing(integerMessage);
-        } else if (integerMessage == Integer.MAX_VALUE) {
+        int intMessage = Integer.parseInt(message);
+        if (intMessage != 0 && intMessage < Integer.MAX_VALUE) {
+            summing(intMessage);
+        } else if (intMessage == Integer.MAX_VALUE) {
             getPrinter().print(PRIMITIVE_PREFIX + buffer);
             getPrinter().print(PRIMITIVE_PREFIX + Integer.MAX_VALUE);
             buffer = 0;
         } else if (buffer == 0) {
-           getPrinter().print(PRIMITIVE_PREFIX + 0);
+            getPrinter().print(PRIMITIVE_PREFIX + 0);
         } else {
             getPrinter().print(PRIMITIVE_PREFIX + message);
         }

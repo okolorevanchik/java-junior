@@ -2,13 +2,13 @@ package com.acme.edu;
 
 public abstract class State {
 
+    protected static final String PRIMITIVE_PREFIX = "primitive: ";
     private static final String OPEN_BRACKET = "{";
     private static final String CLOSE_BRACKET = "}";
     private static final String CHAR_PREFIX = "char: ";
     private static final String PRIMITIVES_MATRIX_PREFIX = "primitives matrix: ";
     private static final String PRIMITIVES_MULTIMATRIX_PREFIX = "primitives multimatrix: ";
     private static final String REFERENCE_PREFIX = "reference: ";
-    protected static final String PRIMITIVE_PREFIX = "primitive: ";
 
     private Printer printer;
 
@@ -63,7 +63,7 @@ public abstract class State {
         printer.print(REFERENCE_PREFIX + message.toString());
     }
 
-    protected Printer getPrinter(){
+    protected Printer getPrinter() {
         return printer;
     }
 
@@ -72,6 +72,14 @@ public abstract class State {
     protected abstract void magic(String message);
 
     protected abstract StateEnum getStateEnum();
+
+    private String arrayStringToString(String... messages) {
+        StringBuilder result = new StringBuilder();
+        for (String message : messages) {
+            result.append(message).append(System.lineSeparator());
+        }
+        return result.toString();
+    }
 
     private String getSumOfNumbersInArray(int[] messages) {
         int sumOfNumbersInArray = 0;
@@ -102,13 +110,5 @@ public abstract class State {
             printer.print(CLOSE_BRACKET);
         }
         printer.print(CLOSE_BRACKET);
-    }
-
-    private static String arrayStringToString(String... messages) {
-        StringBuilder result = new StringBuilder();
-        for (String message : messages) {
-            result.append(message).append(System.lineSeparator());
-        }
-        return result.toString();
     }
 }

@@ -36,7 +36,7 @@ public class Logger {
      * @param message The int to be summing or printed.
      */
     public void log(int message) {
-        if (currentState.getStateEnum() == StateEnum.STRING) {
+        if (currentState.getStateEnum() != StateEnum.NUMBER) {
             currentState.displayBuffer();
             currentState = new NumberState(printer);
         }
@@ -67,7 +67,7 @@ public class Logger {
      * @param message The string to be printed.
      */
     public void log(String message) {
-        if (currentState.getStateEnum() == StateEnum.NUMBER) {
+        if (currentState.getStateEnum() != StateEnum.STRING) {
             currentState.displayBuffer();
             currentState = new StringState(printer);
         }
