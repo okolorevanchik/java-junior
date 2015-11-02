@@ -18,14 +18,6 @@ public abstract class State {
         this.printer = printer;
     }
 
-    public void log(int message) {
-        editBuffer(String.valueOf(message));
-    }
-
-    public void log(String message) {
-        editBuffer(message);
-    }
-
     public void log(char message) {
         displayBuffer();
         printer.print(CHAR_PREFIX + message);
@@ -71,7 +63,7 @@ public abstract class State {
 
     public abstract void displayBuffer();
 
-    protected abstract void editBuffer(String message);
+    public abstract void editBuffer(String message);
 
     private String arrayStringToString(String... messages) {
         StringBuilder result = new StringBuilder();

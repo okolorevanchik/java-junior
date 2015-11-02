@@ -39,7 +39,7 @@ public class Logger {
      */
     public void log(int message) {
         currentState = stateFactory.getNumberState(currentState);
-        currentState.log(message);
+        currentState.editBuffer(String.valueOf(message));
     }
 
     /**
@@ -67,7 +67,7 @@ public class Logger {
      */
     public void log(String message) {
         currentState = stateFactory.getStringState(currentState);
-        currentState.log(message);
+        currentState.editBuffer(message);
     }
 
     /**
