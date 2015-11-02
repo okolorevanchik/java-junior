@@ -31,7 +31,7 @@ public class StringState extends State {
     }
 
     @Override
-    protected void magic(String message) {
+    protected void editBuffer(String message) {
         if (buffer.equals(message)) {
             count++;
         } else {

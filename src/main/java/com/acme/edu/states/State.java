@@ -19,11 +19,11 @@ public abstract class State {
     }
 
     public void log(int message) {
-        magic(String.valueOf(message));
+        editBuffer(String.valueOf(message));
     }
 
     public void log(String message) {
-        magic(message);
+        editBuffer(message);
     }
 
     public void log(char message) {
@@ -71,7 +71,7 @@ public abstract class State {
 
     public abstract void displayBuffer();
 
-    protected abstract void magic(String message);
+    protected abstract void editBuffer(String message);
 
     private String arrayStringToString(String... messages) {
         StringBuilder result = new StringBuilder();

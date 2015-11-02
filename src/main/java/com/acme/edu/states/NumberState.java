@@ -22,7 +22,7 @@ public class NumberState extends State {
     }
 
     @Override
-    protected void magic(String message) {
+    protected void editBuffer(String message) {
         int intMessage = Integer.parseInt(message);
         if (intMessage != 0 && intMessage < Integer.MAX_VALUE) {
             summing(intMessage);
