@@ -4,6 +4,8 @@ import com.acme.edu.Printer;
 
 public class NumberState extends State {
 
+    private static final String PRIMITIVE_PREFIX = "primitive: ";
+
     private int buffer = 0;
 
     public NumberState(Printer printer) {

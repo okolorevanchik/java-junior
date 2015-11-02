@@ -4,7 +4,7 @@ import com.acme.edu.Printer;
 
 public abstract class State {
 
-    protected static final String PRIMITIVE_PREFIX = "primitive: ";
+    private static final String PRIMITIVE_PREFIX = "primitive: ";
     private static final String OPEN_BRACKET = "{";
     private static final String CLOSE_BRACKET = "}";
     private static final String CHAR_PREFIX = "char: ";
