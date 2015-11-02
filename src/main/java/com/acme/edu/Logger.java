@@ -28,6 +28,7 @@ public class Logger {
 
     public Logger(Printer printer) {
         this.stateFactory = new StateFactory(printer);
+        this.currentState = stateFactory.getStringState(null);
     }
 
     /**
