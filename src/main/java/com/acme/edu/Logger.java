@@ -62,7 +62,7 @@ public class Logger {
      * @param message The char to be printed.
      */
     public static void log(char message) {
-        print(CHAR_PREFIX + message);
+        printState(State.OTHER, CHAR_PREFIX + message);
     }
 
     /**
@@ -71,7 +71,7 @@ public class Logger {
      * @param message The boolean to be printed.
      */
     public static void log(boolean message) {
-        print(PRIMITIVE_PREFIX + message);
+        printState(State.OTHER, PRIMITIVE_PREFIX + message);
     }
 
     /**
@@ -80,8 +80,7 @@ public class Logger {
      * @param message The string to be printed.
      */
     public static void log(String message) {
-        printNumberBuffer();
-        setNewStringBufferAndPrintLastStringBuffer(message);
+        printState(State.STRING_BUFFER, message);
     }
 
     /**
@@ -90,11 +89,7 @@ public class Logger {
      * @param messages The array integers to be printed.
      */
     public static void log(int... messages) {
-        int sumOfNumbersInArray = 0;
-        for (int message : messages) {
-            sumOfNumbersInArray += message;
-        }
-        print(String.valueOf(sumOfNumbersInArray));
+        printState(State.OTHER, getSumOfNumbersInArray(messages));
     }
 
     /**
@@ -125,9 +120,7 @@ public class Logger {
      * @param messages The strings to be printed.
      */
     public static void log(String... messages) {
-        for (String message : messages) {
-            print(message);
-        }
+        printState(State.OTHER, arrayStringToString(messages));
     }
 
     /**
@@ -136,17 +129,31 @@ public class Logger {
      * @param message The object reference to be printed.
      */
     public static void log(Object message) {
-        print(REFERENCE_PREFIX + message.toString());
+        printState(State.OTHER, REFERENCE_PREFIX + message.toString());
     }
-
 
     /**
      * Displays the residual data to the console.
      * Called before the cessation of work with logger.
      */
     public static void close() {
-        printNumberBuffer();
-        printStringBuffer();
+        printState(State.OTHER, "");
+    }
+
+    private static String getSumOfNumbersInArray(int[] messages) {
+        int sumOfNumbersInArray = 0;
+        for (int message : messages) {
+            sumOfNumbersInArray += message;
+        }
+        return String.valueOf(sumOfNumbersInArray);
+    }
+
+    private static String arrayStringToString(String... messages) {
+        StringBuilder result = new StringBuilder();
+        for (String message : messages) {
+            result.append(message).append(System.lineSeparator());
+        }
+        return result.toString();
     }
 
     private static void printMultimatrix(int[][][][] multimatrixMessages) {
@@ -173,7 +180,7 @@ public class Logger {
     }
 
     private static void printStringBufferAndPrimitiveNumber(int message, int maxValue) {
-        printStringBuffer();
+        printState(State.NUMBER_BUFFER, "");
         printPrimitiveNumber(message, maxValue);
     }
 
@@ -230,6 +237,23 @@ public class Logger {
         }
         print(PRIMITIVE_PREFIX + numberBuffer);
         numberBuffer = 0;
+    }
+
+    private static void printState(State state, String message) {
+        switch (state) {
+            case NUMBER_BUFFER:
+                printStringBuffer();
+                break;
+            case STRING_BUFFER:
+                printNumberBuffer();
+                setNewStringBufferAndPrintLastStringBuffer(message);
+                break;
+            default:
+                printNumberBuffer();
+                printStringBuffer();
+                if (!message.isEmpty())
+                    print(message);
+        }
     }
 
     private static void print(String message) {

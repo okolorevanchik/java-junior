@@ -43,17 +43,17 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     @Test
     public void shouldLogIntegersMatrix() throws IOException {
         //region when
-        Logger.log(new int[][] {{-1, 0, 1}, {1, 2, 3}, {-1, -2, -3}});
+        Logger.log(new int[][]{{-1, 0, 1}, {1, 2, 3}, {-1, -2, -3}});
         Logger.close();
         //endregion
 
         //region then
         assertSysoutEquals(
-            "primitives matrix: {" + SEP +
-                "{-1, 0, 1}" + SEP +
-                "{1, 2, 3}" + SEP +
-                "{-1, -2, -3}" + SEP +
-            "}" + SEP
+                "primitives matrix: {" + SEP +
+                        "{-1, 0, 1}" + SEP +
+                        "{1, 2, 3}" + SEP +
+                        "{-1, -2, -3}" + SEP +
+                        "}" + SEP
         );
         //endregion
     }
@@ -61,17 +61,17 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     @Test
     public void shouldLogIntegersMulitidimentionalArray() throws IOException {
         //region when
-        Logger.log(new int[][][][] {{{{0}}}});
+        Logger.log(new int[][][][]{{{{0}}}});
         Logger.close();
         //endregion
 
         //region then
         assertSysoutEquals(
-            "primitives multimatrix: {" + SEP +
-                "{" + SEP + "{" + SEP + "{" +
-                    "0" +
-                "}" + SEP + "}" + SEP + "}" + SEP +
-            "}" + SEP
+                "primitives multimatrix: {" + SEP +
+                        "{" + SEP + "{" + SEP +
+                        "{" + "0" + "}" + SEP +
+                        "}" + SEP + "}" + SEP +
+                        "}" + SEP
         );
         //endregion
     }
