@@ -1,4 +1,6 @@
-package com.acme.edu;
+package com.acme.edu.states;
+
+import com.acme.edu.Printer;
 
 public abstract class State {
 
@@ -70,8 +72,6 @@ public abstract class State {
     public abstract void displayBuffer();
 
     protected abstract void magic(String message);
-
-    protected abstract StateEnum getStateEnum();
 
     private String arrayStringToString(String... messages) {
         StringBuilder result = new StringBuilder();

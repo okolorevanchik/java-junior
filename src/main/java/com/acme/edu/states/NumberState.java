@@ -1,8 +1,8 @@
-package com.acme.edu;
+package com.acme.edu.states;
+
+import com.acme.edu.Printer;
 
 public class NumberState extends State {
-
-    private static final StateEnum state = StateEnum.NUMBER;
 
     private int buffer = 0;
 
@@ -33,11 +33,6 @@ public class NumberState extends State {
         } else {
             getPrinter().print(PRIMITIVE_PREFIX + message);
         }
-    }
-
-    @Override
-    protected StateEnum getStateEnum() {
-        return state;
     }
 
     private void summing(int message) {

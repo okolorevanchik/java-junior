@@ -1,5 +1,7 @@
 package com.acme.edu;
 
+import com.acme.edu.states.State;
+
 /**
  * Logger class provides functions for logging data.
  * For correct processing and the withdrawal of all
@@ -21,12 +23,11 @@ package com.acme.edu;
  */
 public class Logger {
 
+    private StateFactory stateFactory;
     private State currentState;
-    private Printer printer;
 
     public Logger(Printer printer) {
-        this.printer = printer;
-        this.currentState = new StringState(printer);
+        this.stateFactory = new StateFactory(printer);
     }
 
     /**
@@ -36,10 +37,7 @@ public class Logger {
      * @param message The int to be summing or printed.
      */
     public void log(int message) {
-        if (currentState.getStateEnum() != StateEnum.NUMBER) {
-            currentState.displayBuffer();
-            currentState = new NumberState(printer);
-        }
+        currentState = stateFactory.getNumberState(currentState);
         currentState.log(message);
     }
 
@@ -67,10 +65,7 @@ public class Logger {
      * @param message The string to be printed.
      */
     public void log(String message) {
-        if (currentState.getStateEnum() != StateEnum.STRING) {
-            currentState.displayBuffer();
-            currentState = new StringState(printer);
-        }
+        currentState = stateFactory.getStringState(currentState);
         currentState.log(message);
     }
 

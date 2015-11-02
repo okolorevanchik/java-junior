@@ -1,6 +1,6 @@
 package com.acme.edu;
 
-public enum StateEnum {
+public enum LoggerStateHolder {
     NUMBER,
     STRING
 }

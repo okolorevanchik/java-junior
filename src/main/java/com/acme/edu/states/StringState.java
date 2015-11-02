@@ -1,10 +1,11 @@
-package com.acme.edu;
+package com.acme.edu.states;
+
+import com.acme.edu.Printer;
 
 public class StringState extends State {
 
     private static final String STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX = "string: %s (x%d)";
     private static final String STRING_PREFIX = "string: ";
-    private static final StateEnum state = StateEnum.STRING;
 
     private String buffer = "";
     private int count = 1;
@@ -37,10 +38,5 @@ public class StringState extends State {
             displayBuffer();
             buffer = message;
         }
-    }
-
-    @Override
-    protected StateEnum getStateEnum() {
-        return state;
     }
 }
