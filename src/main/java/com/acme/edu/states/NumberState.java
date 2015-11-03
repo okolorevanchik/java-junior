@@ -23,7 +23,7 @@ public class NumberState implements State {
     }
 
     @Override
-    public void cleanOrCommutationBuffer(String message) {
+    public void log(String message) {
         int intMessage = Integer.parseInt(message);
         if (intMessage != 0 && intMessage < Integer.MAX_VALUE) {
             summing(intMessage);

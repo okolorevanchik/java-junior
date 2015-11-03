@@ -15,7 +15,7 @@ public class DefaultState implements State {
     }
 
     @Override
-    public void cleanOrCommutationBuffer(String message) {
+    public void log(String message) {
         printable.print(message);
     }
 }

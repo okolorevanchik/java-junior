@@ -48,7 +48,7 @@ public class Logger {
      */
     public void log(int message) {
         currentState = stateFactory.getNumberState(currentState);
-        currentState.cleanOrCommutationBuffer(String.valueOf(message));
+        currentState.log(String.valueOf(message));
     }
 
     /**
@@ -76,7 +76,7 @@ public class Logger {
      */
     public void log(String message) {
         currentState = stateFactory.getStringState(currentState);
-        currentState.cleanOrCommutationBuffer(message);
+        currentState.log(message);
     }
 
     /**
@@ -135,7 +135,7 @@ public class Logger {
     private void printDefaultMessage(String prefix, String message) {
         currentState = stateFactory.getDefaultState(currentState);
         String result = String.format(prefix, message);
-        currentState.cleanOrCommutationBuffer(result);
+        currentState.log(result);
     }
 
     private String getSumOfNumbersInArray(int[] messages) {

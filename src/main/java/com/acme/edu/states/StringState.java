@@ -32,7 +32,7 @@ public class StringState implements State {
     }
 
     @Override
-    public void cleanOrCommutationBuffer(String message) {
+    public void log(String message) {
         if (buffer.equals(message)) {
             count++;
         } else {
