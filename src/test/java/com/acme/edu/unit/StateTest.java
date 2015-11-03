@@ -68,7 +68,9 @@ public class StateTest {
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
-        verify(printable, times(2));
+
+        verify(printable, times(1)).print("primitive: " + Integer.MAX_VALUE);
+        verify(printable, times(1)).print("primitive: 10");
     }
 
     @Test
@@ -76,6 +78,7 @@ public class StateTest {
         State state = new NumberState(printable);
 
         state.log(String.valueOf(0));
+        state.displayBuffer();
 
         verify(printable, times(1)).print("primitive: 0");
     }
@@ -86,8 +89,10 @@ public class StateTest {
 
         state.log(String.valueOf(10));
         state.log(String.valueOf(0));
+        state.displayBuffer();
 
         verify(printable, times(1)).print("primitive: 0");
+        verify(printable, times(1)).print("primitive: 10");
     }
 
     @Test
@@ -97,6 +102,7 @@ public class StateTest {
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
         state.displayBuffer();
+
         verify(printable, times(1)).print("string: 10");
         verify(printable, times(1)).print("string: " + Integer.MAX_VALUE);
     }
