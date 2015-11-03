@@ -19,7 +19,7 @@ import com.acme.edu.states.State;
  * Logger.close();
  * }</code>
  *
- * @autor Tolchinskiy Dmitriy
+ * @author Tolchinskiy Dmitriy
  */
 public class Logger {
 
