@@ -7,9 +7,7 @@ import com.acme.edu.states.StringState;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class StateTest {
 
@@ -105,5 +103,16 @@ public class StateTest {
 
         verify(printable, times(1)).print("string: 10");
         verify(printable, times(1)).print("string: " + Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void shouldCollMethodPrintWhenIntegerMessageOverflow() {
+        State state = new NumberState(printable);
+
+        state.log(String.valueOf(Integer.MAX_VALUE - 1));
+        state.log("10");
+        state.displayBuffer();
+
+        verify(printable, times(1)).print("primitive: " + (Integer.MAX_VALUE - 1));
     }
 }
