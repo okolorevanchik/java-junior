@@ -18,23 +18,23 @@ public class StateFactory {
     }
 
     public State getNumberState(State currentState) {
-        if (currentState != null && currentState != numberState) {
-            currentState.displayBuffer();
-        }
+        printBuffer(currentState, numberState);
         return numberState;
     }
 
     public State getStringState(State currentState) {
-        if (currentState != null && currentState != stringState) {
-            currentState.displayBuffer();
-        }
+        printBuffer(currentState, stringState);
         return stringState;
     }
 
     public State getDefaultState(State currentState) {
-        if (currentState != null && currentState != defaultState) {
+        printBuffer(currentState, defaultState);
+        return defaultState;
+    }
+
+    private void printBuffer(State currentState, State checkedState) {
+        if (currentState != null && currentState != checkedState) {
             currentState.displayBuffer();
         }
-        return defaultState;
     }
 }
