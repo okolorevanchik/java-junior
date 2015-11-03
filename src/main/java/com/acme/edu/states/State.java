@@ -11,6 +11,7 @@ public abstract class State {
     private static final String PRIMITIVES_MATRIX_PREFIX = "primitives matrix: ";
     private static final String PRIMITIVES_MULTIMATRIX_PREFIX = "primitives multimatrix: ";
     private static final String REFERENCE_PREFIX = "reference: ";
+    private static final String SEP = System.lineSeparator();
 
     private Printer printer;
 
@@ -35,16 +36,14 @@ public abstract class State {
 
     public void log(int[][] matrixMessages) {
         displayBuffer();
-        printer.print(PRIMITIVES_MATRIX_PREFIX + OPEN_BRACKET);
-        printMatrix(matrixMessages);
-        printer.print(CLOSE_BRACKET);
+        printer.print(PRIMITIVES_MATRIX_PREFIX + OPEN_BRACKET + SEP +
+                printMatrix(matrixMessages) + CLOSE_BRACKET);
     }
 
     public void log(int[][][][] multimatrixMessages) {
         displayBuffer();
-        printer.print(PRIMITIVES_MULTIMATRIX_PREFIX + OPEN_BRACKET);
-        printMultimatrix(multimatrixMessages);
-        printer.print(CLOSE_BRACKET);
+        printer.print(PRIMITIVES_MULTIMATRIX_PREFIX + OPEN_BRACKET + SEP +
+                printMultimatrix(multimatrixMessages) + CLOSE_BRACKET);
     }
 
     public void log(String... messages) {
@@ -63,7 +62,7 @@ public abstract class State {
 
     public abstract void displayBuffer();
 
-    public abstract void editBuffer(String message);
+    public abstract void cleanOrCommutationBuffer(String message);
 
     private String arrayStringToString(String... messages) {
         StringBuilder result = new StringBuilder();
@@ -81,26 +80,28 @@ public abstract class State {
         return String.valueOf(sumOfNumbersInArray);
     }
 
-    private void printMatrix(int[][] arrayMessages) {
+    private String printMatrix(int[][] arrayMessages) {
+        StringBuilder result = new StringBuilder();
         for (int[] arrayMessage : arrayMessages) {
-            StringBuilder oneStringArray = new StringBuilder(OPEN_BRACKET);
+            result.append(OPEN_BRACKET);
             for (int message : arrayMessage) {
-                oneStringArray.append(message).append(", ");
+                result.append(message).append(", ");
             }
-            oneStringArray.replace(oneStringArray.length() - 2, oneStringArray.length(), CLOSE_BRACKET);
-            printer.print(oneStringArray.toString());
+            result.replace(result.length() - 2, result.length(), CLOSE_BRACKET + SEP);
         }
+        return result.toString();
     }
 
-    private void printMultimatrix(int[][][][] multimatrixMessages) {
-        printer.print(OPEN_BRACKET);
+    private String printMultimatrix(int[][][][] multimatrixMessages) {
+        StringBuilder result = new StringBuilder(OPEN_BRACKET + SEP);
         for (int[][][] multimatrix : multimatrixMessages) {
-            printer.print(OPEN_BRACKET);
+            result.append(OPEN_BRACKET).append(SEP);
             for (int[][] matrix : multimatrix) {
-                printMatrix(matrix);
+                result.append(printMatrix(matrix));
             }
-            printer.print(CLOSE_BRACKET);
+            result.append(CLOSE_BRACKET).append(SEP);
         }
-        printer.print(CLOSE_BRACKET);
+        result.append(CLOSE_BRACKET).append(SEP);
+        return result.toString();
     }
 }

@@ -31,7 +31,7 @@ public class StringState extends State {
     }
 
     @Override
-    protected void editBuffer(String message) {
+    public void cleanOrCommutationBuffer(String message) {
         if (buffer.equals(message)) {
             count++;
         } else {
