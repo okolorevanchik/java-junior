@@ -110,9 +110,10 @@ public class StateTest {
         State state = new NumberState(printable);
 
         state.log(String.valueOf(Integer.MAX_VALUE - 1));
-        state.log("10");
+        state.log(String.valueOf(-1));
+        state.log(String.valueOf(10));
         state.displayBuffer();
 
-        verify(printable, times(1)).print("primitive: " + (Integer.MAX_VALUE - 1));
+        verify(printable, times(1)).print("primitive: " + (Integer.MAX_VALUE - 2));
     }
 }
