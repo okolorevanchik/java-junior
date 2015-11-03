@@ -2,10 +2,12 @@ package com.acme.edu.states;
 
 import com.acme.edu.Printable;
 
-public class DefaultState extends State {
+public class DefaultState implements State {
+
+    private Printable printable;
 
     public DefaultState(Printable printable) {
-        super(printable);
+        this.printable = printable;
     }
 
     @Override
@@ -14,6 +16,6 @@ public class DefaultState extends State {
 
     @Override
     public void cleanOrCommutationBuffer(String message) {
-        getPrintable().print(message);
+        printable.print(message);
     }
 }

@@ -2,16 +2,17 @@ package com.acme.edu.states;
 
 import com.acme.edu.Printable;
 
-public class StringState extends State {
+public class StringState implements State {
 
     private static final String STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX = "string: %s (x%d)";
     private static final String STRING_PREFIX = "string: ";
 
     private String buffer = "";
     private int count = 1;
+    private Printable printable;
 
     public StringState(Printable printable) {
-        super(printable);
+        this.printable = printable;
     }
 
 
@@ -22,10 +23,10 @@ public class StringState extends State {
         }
 
         if (count > 1) {
-            getPrintable().print(String.format(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, count));
+            printable.print(String.format(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, count));
             count = 1;
         } else {
-            getPrintable().print(STRING_PREFIX + buffer);
+            printable.print(STRING_PREFIX + buffer);
         }
         buffer = "";
     }
