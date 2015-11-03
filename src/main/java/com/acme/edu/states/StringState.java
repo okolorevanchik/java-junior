@@ -1,6 +1,6 @@
 package com.acme.edu.states;
 
-import com.acme.edu.Printer;
+import com.acme.edu.Printable;
 
 public class StringState extends State {
 
@@ -10,8 +10,8 @@ public class StringState extends State {
     private String buffer = "";
     private int count = 1;
 
-    public StringState(Printer printer) {
-        super(printer);
+    public StringState(Printable printable) {
+        super(printable);
     }
 
 
@@ -22,10 +22,10 @@ public class StringState extends State {
         }
 
         if (count > 1) {
-            getPrinter().print(String.format(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, count));
+            getPrintable().print(String.format(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, count));
             count = 1;
         } else {
-            getPrinter().print(STRING_PREFIX + buffer);
+            getPrintable().print(STRING_PREFIX + buffer);
         }
         buffer = "";
     }

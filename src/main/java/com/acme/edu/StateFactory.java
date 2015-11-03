@@ -1,5 +1,6 @@
 package com.acme.edu;
 
+import com.acme.edu.states.DefaultState;
 import com.acme.edu.states.NumberState;
 import com.acme.edu.states.State;
 import com.acme.edu.states.StringState;
@@ -8,10 +9,12 @@ public class StateFactory {
 
     private State numberState;
     private State stringState;
+    private State defaultState;
 
-    public StateFactory(Printer printer) {
-        this.numberState = new NumberState(printer);
-        this.stringState = new StringState(printer);
+    public StateFactory(Printable printable) {
+        this.numberState = new NumberState(printable);
+        this.stringState = new StringState(printable);
+        this.defaultState = new DefaultState(printable);
     }
 
     public State getNumberState(State currentState) {
@@ -22,9 +25,16 @@ public class StateFactory {
     }
 
     public State getStringState(State currentState) {
-        if (currentState!= null && currentState != stringState) {
+        if (currentState != null && currentState != stringState) {
             currentState.displayBuffer();
         }
         return stringState;
+    }
+
+    public State getDefaultState(State currentState) {
+        if (currentState != null && currentState != defaultState) {
+            currentState.displayBuffer();
+        }
+        return defaultState;
     }
 }

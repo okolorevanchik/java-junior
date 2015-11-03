@@ -23,12 +23,21 @@ import com.acme.edu.states.State;
  */
 public class Logger {
 
+    private static final String SEP = System.lineSeparator();
+    private static final String NOT_PREFIX = "%s";
+    private static final String CHAR_PREFIX = "char: %s";
+    private static final String PRIMITIVE_PREFIX = "primitive: %s";
+    private static final String PRIMITIVES_MATRIX_PREFIX = "primitives matrix: {" + SEP + "%s}";
+    private static final String PRIMITIVES_MULTIMATRIX_PREFIX = "primitives multimatrix: {" + SEP + "%s}";
+    private static final String REFERENCE_PREFIX = "reference: %s";
+    private static final String OPEN_BRACKET = "{";
+    private static final String CLOSE_BRACKET = "}";
+
     private StateFactory stateFactory;
     private State currentState;
 
-    public Logger(Printer printer) {
-        this.stateFactory = new StateFactory(printer);
-        this.currentState = stateFactory.getStringState(null);
+    public Logger(Printable printable) {
+        this.stateFactory = new StateFactory(printable);
     }
 
     /**
@@ -48,7 +57,7 @@ public class Logger {
      * @param message The char to be printed.
      */
     public void log(char message) {
-        currentState.log(message);
+        printDefaultMessage(CHAR_PREFIX, String.valueOf(message));
     }
 
     /**
@@ -57,7 +66,7 @@ public class Logger {
      * @param message The boolean to be printed.
      */
     public void log(boolean message) {
-        currentState.log(message);
+        printDefaultMessage(PRIMITIVE_PREFIX, String.valueOf(message));
     }
 
     /**
@@ -76,7 +85,7 @@ public class Logger {
      * @param messages The array integers to be printed.
      */
     public void log(int... messages) {
-        currentState.log(messages);
+        printDefaultMessage(NOT_PREFIX, getSumOfNumbersInArray(messages));
     }
 
     /**
@@ -85,7 +94,7 @@ public class Logger {
      * @param matrixMessages The matrix to be printed.
      */
     public void log(int[][] matrixMessages) {
-        currentState.log(matrixMessages);
+        printDefaultMessage(PRIMITIVES_MATRIX_PREFIX, printMatrix(matrixMessages));
     }
 
     /**
@@ -94,7 +103,7 @@ public class Logger {
      * @param multimatrixMessages The multimatrix to be printed.
      */
     public void log(int[][][][] multimatrixMessages) {
-        currentState.log(multimatrixMessages);
+        printDefaultMessage(PRIMITIVES_MULTIMATRIX_PREFIX, printMultimatrix(multimatrixMessages));
     }
 
     /**
@@ -103,7 +112,7 @@ public class Logger {
      * @param messages The strings to be printed.
      */
     public void log(String... messages) {
-        currentState.log(messages);
+        printDefaultMessage(NOT_PREFIX, arrayStringToString(messages));
     }
 
     /**
@@ -112,7 +121,7 @@ public class Logger {
      * @param message The object reference to be printed.
      */
     public void log(Object message) {
-        currentState.log(message);
+        printDefaultMessage(REFERENCE_PREFIX, message.toString());
     }
 
     /**
@@ -121,5 +130,52 @@ public class Logger {
      */
     public void close() {
         currentState.displayBuffer();
+    }
+
+    private void printDefaultMessage(String prefix, String message) {
+        currentState = stateFactory.getDefaultState(currentState);
+        String result = String.format(prefix, message);
+        currentState.cleanOrCommutationBuffer(result);
+    }
+
+    private String getSumOfNumbersInArray(int[] messages) {
+        int sumOfNumbersInArray = 0;
+        for (int message : messages) {
+            sumOfNumbersInArray += message;
+        }
+        return String.valueOf(sumOfNumbersInArray);
+    }
+
+    private String printMatrix(int[][] arrayMessages) {
+        StringBuilder result = new StringBuilder();
+        for (int[] arrayMessage : arrayMessages) {
+            result.append(OPEN_BRACKET);
+            for (int message : arrayMessage) {
+                result.append(message).append(", ");
+            }
+            result.replace(result.length() - 2, result.length(), CLOSE_BRACKET + SEP);
+        }
+        return result.toString();
+    }
+
+    private String printMultimatrix(int[][][][] multimatrixMessages) {
+        StringBuilder result = new StringBuilder(OPEN_BRACKET + SEP);
+        for (int[][][] multimatrix : multimatrixMessages) {
+            result.append(OPEN_BRACKET).append(SEP);
+            for (int[][] matrix : multimatrix) {
+                result.append(printMatrix(matrix));
+            }
+            result.append(CLOSE_BRACKET).append(SEP);
+        }
+        result.append(CLOSE_BRACKET).append(SEP);
+        return result.toString();
+    }
+
+    private String arrayStringToString(String... messages) {
+        StringBuilder result = new StringBuilder();
+        for (String message : messages) {
+            result.append(message).append(SEP);
+        }
+        return result.toString();
     }
 }
