@@ -3,7 +3,9 @@ package com.acme.edu.iteration02;
 import com.acme.edu.Decorate;
 import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
-import com.acme.edu.exceptions.*;
+import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
+import com.acme.edu.exceptions.IncorrectInputsParametersMethodException;
+import com.acme.edu.exceptions.LogWritingException;
 import com.acme.edu.printers.ConsolePrinter;
 import com.acme.edu.printers.Printable;
 import com.acme.edu.states.ManagedState;
@@ -20,7 +22,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     private static final String SEP = System.lineSeparator();
     private static final Printable PRINTABLE = new ConsolePrinter();
     private static final Decorate DECORATE = String::format;
-    
+
     private Logger logger;
 
     //region given

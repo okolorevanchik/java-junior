@@ -13,17 +13,24 @@ import static org.mockito.Mockito.*;
 
 public class StateTest {
 
+    private static final String PRIMITIVE_PREFIX = "primitive: %s";
+    private static final String STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX = "string: %s (x%s)";
+    private static final String STRING_PREFIX = "string: %s";
+
     private Printable printable;
-    private Decorate decorate = String::format;
+    private Decorate decorate;
 
     @Before
     public void setUp() {
         printable = mock(Printable.class);
+        decorate = mock(Decorate.class);
     }
 
     @Test
     public void shouldCollMethodPrintOnceAndPrintOneResultForIntBuffer() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(6)))
+                .thenReturn("primitive: " + 6);
 
         state.log(String.valueOf(2));
         state.log(String.valueOf(2));
@@ -36,6 +43,8 @@ public class StateTest {
     @Test
     public void shouldCollMethodPrintOnceAndPrintOnceResultForStringBuffer() throws LogWritingException {
         State state = new StringBufferState(printable, decorate);
+        when(decorate.getDecorateString(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, "str2", String.valueOf(3)))
+                .thenReturn("string: str2 (x3)");
 
         state.log("str2");
         state.log("str2");
@@ -66,6 +75,10 @@ public class StateTest {
     @Test
     public void shouldCollMethodPrintForIntMaxValueMessageTwice() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(Integer.MAX_VALUE)))
+                .thenReturn("primitive: " + Integer.MAX_VALUE);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(10)))
+                .thenReturn("primitive: " + 10);
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
@@ -78,6 +91,8 @@ public class StateTest {
     @Test
     public void shouldCollMethodPrintForNumberWhenIntBufferIsZero() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(0)))
+                .thenReturn("primitive: " + 0);
 
         state.log(String.valueOf(0));
         state.flush();
@@ -88,6 +103,10 @@ public class StateTest {
     @Test
     public void shouldCollMethodPrintWhenMessageIsIntegerMaxValueTwice() throws LogWritingException {
         State state = new StringBufferState(printable, decorate);
+        when(decorate.getDecorateString(STRING_PREFIX, String.valueOf(Integer.MAX_VALUE)))
+                .thenReturn("string: " + Integer.MAX_VALUE);
+        when(decorate.getDecorateString(STRING_PREFIX, String.valueOf(10)))
+                .thenReturn("string: " + 10);
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
@@ -100,6 +119,12 @@ public class StateTest {
     @Test
     public void shouldCollMethodPrintWhenMessageIsIntegerMinValueTwice() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(-30)))
+                .thenReturn("primitive: " + -30);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(Integer.MIN_VALUE)))
+                .thenReturn("primitive: " + Integer.MIN_VALUE);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(-100520)))
+                .thenReturn("primitive: " + -100520);
 
         state.log("-10");
         state.log("-20");
@@ -116,6 +141,8 @@ public class StateTest {
     @Test
     public void shouldCollMethodPrintWhenIntegerMessageOverflowPositive() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(Integer.MAX_VALUE - 2)))
+                .thenReturn("primitive: " + (Integer.MAX_VALUE - 2));
 
         state.log(String.valueOf(Integer.MAX_VALUE - 1));
         state.log(String.valueOf(-1));
@@ -128,6 +155,8 @@ public class StateTest {
     @Test
     public void shouldCollMethodPrintWhenIntegerMessageOverflowNegative() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
+        when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(Integer.MIN_VALUE + 2)))
+                .thenReturn("primitive: " + (Integer.MIN_VALUE + 2));
 
         state.log(String.valueOf(Integer.MIN_VALUE + 1));
         state.log(String.valueOf(1));

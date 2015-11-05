@@ -22,7 +22,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     private static final String SEP = System.lineSeparator();
     private static final Printable PRINTABLE = new ConsolePrinter();
     private static final Decorate DECORATE = String::format;
-    
+
     private Logger logger;
 
     //region given

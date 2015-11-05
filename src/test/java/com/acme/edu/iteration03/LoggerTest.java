@@ -24,7 +24,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     private static final Decorate DECORATE = String::format;
 
     private Logger logger;
-    
+
     //region given
     @Before
     public void setUpSystemOut() throws IOException, IncorrectArgumentsConstructorException {
