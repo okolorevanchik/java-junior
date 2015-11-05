@@ -1,8 +1,7 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.exceptions.SendingDataOverNetworkException;
-import com.acme.edu.exceptions.WritingDataToFileException;
+import com.acme.edu.exceptions.LogWritingException;
 import com.acme.edu.printers.Printable;
 
 public abstract class State {
@@ -23,7 +22,7 @@ public abstract class State {
         return decorate;
     }
 
-    public abstract void flush() throws WritingDataToFileException, SendingDataOverNetworkException;
+    public abstract void flush() throws LogWritingException;
 
-    public abstract void log(String message) throws WritingDataToFileException, SendingDataOverNetworkException;
+    public abstract void log(String message) throws LogWritingException;
 }

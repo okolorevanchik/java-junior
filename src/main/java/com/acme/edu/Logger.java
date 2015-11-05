@@ -1,9 +1,6 @@
 package com.acme.edu;
 
-import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
-import com.acme.edu.exceptions.IncorrectInputsParametersMethodException;
-import com.acme.edu.exceptions.SendingDataOverNetworkException;
-import com.acme.edu.exceptions.WritingDataToFileException;
+import com.acme.edu.exceptions.*;
 import com.acme.edu.states.ManagedState;
 import com.acme.edu.states.State;
 
@@ -41,7 +38,7 @@ public class Logger {
     private ManagedState managedState;
     private State currentState;
 
-    public Logger(ManagedState managedState) {
+    public Logger(ManagedState managedState) throws IncorrectArgumentsConstructorException {
         if (managedState == null) {
             throw new IncorrectArgumentsConstructorException();
         }
@@ -54,7 +51,7 @@ public class Logger {
      *
      * @param message The int to be summing or printed.
      */
-    public void log(int message) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(int message) throws LogWritingException {
         currentState = managedState.getNumberState(currentState);
         currentState.log(String.valueOf(message));
 
@@ -65,7 +62,7 @@ public class Logger {
      *
      * @param message The char to be printed.
      */
-    public void log(char message) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(char message) throws LogWritingException, IncorrectInputsParametersMethodException {
         printDefaultMessage(CHAR_PREFIX, String.valueOf(message));
     }
 
@@ -74,7 +71,7 @@ public class Logger {
      *
      * @param message The boolean to be printed.
      */
-    public void log(boolean message) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(boolean message) throws LogWritingException, IncorrectInputsParametersMethodException {
         printDefaultMessage(PRIMITIVE_PREFIX, String.valueOf(message));
     }
 
@@ -83,7 +80,7 @@ public class Logger {
      *
      * @param message The string to be printed.
      */
-    public void log(String message) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(String message) throws LogWritingException, IncorrectInputsParametersMethodException {
         checkNullObjectOrEmptyString(message);
         currentState = managedState.getStringState(currentState);
         currentState.log(message);
@@ -95,7 +92,7 @@ public class Logger {
      *
      * @param messages The array integers to be printed.
      */
-    public void log(int... messages) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(int... messages) throws LogWritingException, IncorrectInputsParametersMethodException {
         printDefaultMessage(NOT_PREFIX, getSumOfNumbersInArray(messages));
     }
 
@@ -104,7 +101,7 @@ public class Logger {
      *
      * @param matrixMessages The matrix to be printed.
      */
-    public void log(int[][] matrixMessages) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(int[][] matrixMessages) throws LogWritingException, IncorrectInputsParametersMethodException {
         printDefaultMessage(PRIMITIVES_MATRIX_PREFIX, printMatrix(matrixMessages));
     }
 
@@ -113,7 +110,7 @@ public class Logger {
      *
      * @param multimatrixMessages The multimatrix to be printed.
      */
-    public void log(int[][][][] multimatrixMessages) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(int[][][][] multimatrixMessages) throws LogWritingException, IncorrectInputsParametersMethodException {
         printDefaultMessage(PRIMITIVES_MULTIMATRIX_PREFIX, printMultimatrix(multimatrixMessages));
     }
 
@@ -122,7 +119,7 @@ public class Logger {
      *
      * @param messages The strings to be printed.
      */
-    public void log(String... messages) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(String... messages) throws LogWritingException, IncorrectInputsParametersMethodException {
         printDefaultMessage(NOT_PREFIX, arrayStringToString(messages));
     }
 
@@ -131,7 +128,7 @@ public class Logger {
      *
      * @param message The object reference to be printed.
      */
-    public void log(Object message) throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void log(Object message) throws LogWritingException, IncorrectInputsParametersMethodException {
         printDefaultMessage(REFERENCE_PREFIX, message.toString());
     }
 
@@ -139,11 +136,11 @@ public class Logger {
      * Displays the residual data to the console.
      * Called before the cessation of work with logger.
      */
-    public void close() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void close() throws LogWritingException {
         currentState.flush();
     }
 
-    private void printDefaultMessage(String prefix, String message) throws WritingDataToFileException, SendingDataOverNetworkException {
+    private void printDefaultMessage(String prefix, String message) throws LogWritingException, IncorrectInputsParametersMethodException {
         checkNullObjectOrEmptyString(message);
         currentState = managedState.getDefaultState(currentState);
         String result = currentState.getDecorate().getDecorateString(prefix, message);
@@ -151,13 +148,13 @@ public class Logger {
 
     }
 
-    private void checkNullObjectOrEmptyString(Object message) {
+    private void checkNullObjectOrEmptyString(Object message) throws IncorrectInputsParametersMethodException {
         if (message == null || message.toString().isEmpty()) {
             throw new IncorrectInputsParametersMethodException();
         }
     }
 
-    private String getSumOfNumbersInArray(int[] messages) {
+    private String getSumOfNumbersInArray(int[] messages) throws IncorrectInputsParametersMethodException {
         checkNullObjectOrEmptyString(messages);
 
         int sumOfNumbersInArray = 0;
@@ -168,7 +165,7 @@ public class Logger {
         return String.valueOf(sumOfNumbersInArray);
     }
 
-    private String printMatrix(int[][] arrayMessages) {
+    private String printMatrix(int[][] arrayMessages) throws IncorrectInputsParametersMethodException {
         checkNullObjectOrEmptyString(arrayMessages);
 
         StringBuilder result = new StringBuilder();
@@ -184,7 +181,7 @@ public class Logger {
         return result.toString();
     }
 
-    private String printMultimatrix(int[][][][] multimatrixMessages) {
+    private String printMultimatrix(int[][][][] multimatrixMessages) throws IncorrectInputsParametersMethodException {
         checkNullObjectOrEmptyString(multimatrixMessages);
 
         StringBuilder result = new StringBuilder(OPEN_BRACKET + SEP);
@@ -201,7 +198,7 @@ public class Logger {
         return result.toString();
     }
 
-    private String arrayStringToString(String... messages) {
+    private String arrayStringToString(String... messages) throws IncorrectInputsParametersMethodException {
         checkNullObjectOrEmptyString(messages);
 
         StringBuilder result = new StringBuilder();

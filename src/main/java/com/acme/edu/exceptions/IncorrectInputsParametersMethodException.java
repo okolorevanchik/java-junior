@@ -1,4 +1,4 @@
 package com.acme.edu.exceptions;
 
-public class IncorrectInputsParametersMethodException extends NullPointerException {
+public class IncorrectInputsParametersMethodException extends Exception {
 }
