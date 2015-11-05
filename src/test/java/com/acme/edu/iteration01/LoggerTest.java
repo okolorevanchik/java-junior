@@ -3,9 +3,6 @@ package com.acme.edu.iteration01;
 import com.acme.edu.Decorate;
 import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
-import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
-import com.acme.edu.exceptions.IncorrectInputsParametersMethodException;
-import com.acme.edu.exceptions.LogWritingException;
 import com.acme.edu.printers.ConsolePrinter;
 import com.acme.edu.printers.Printable;
 import com.acme.edu.states.ManagedState;
@@ -13,8 +10,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.IOException;
 
 @Ignore
 public class LoggerTest implements SysoutCaptureAndAssertionAbility {
@@ -27,7 +22,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
     //region given
     @Before
-    public void setUpSystemOut() throws IOException, IncorrectArgumentsConstructorException {
+    public void setUpSystemOut() throws Exception {
         resetOut();
         captureSysout();
         logger = new Logger(new ManagedState(PRINTABLE, DECORATE));
@@ -35,12 +30,12 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     //endregion
 
     @After
-    public void setUpResetOut() throws IOException {
+    public void setUpResetOut() throws Exception {
         resetOut();
     }
 
     @Test
-    public void shouldLogInteger() throws IOException, LogWritingException {
+    public void shouldLogInteger() throws Exception {
         //region when
         logger.log(1);
         logger.log(0);
@@ -55,7 +50,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogByte() throws IOException, LogWritingException {
+    public void shouldLogByte() throws Exception {
         //region when
         logger.log((byte) 1);
         logger.log((byte) 0);
@@ -69,7 +64,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogChar() throws IOException, IncorrectInputsParametersMethodException, LogWritingException {
+    public void shouldLogChar() throws Exception {
         //region when
         logger.log('a');
         logger.log('b');
@@ -84,7 +79,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogString() throws IOException, IncorrectInputsParametersMethodException, LogWritingException {
+    public void shouldLogString() throws Exception {
         //region when
         logger.log("test string 1");
         logger.log("other str");
@@ -99,7 +94,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogBoolean() throws IOException, IncorrectInputsParametersMethodException, LogWritingException {
+    public void shouldLogBoolean() throws Exception {
         //region when
         logger.log(true);
         logger.log(false);
@@ -114,7 +109,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogReference() throws IOException, IncorrectInputsParametersMethodException, LogWritingException {
+    public void shouldLogReference() throws Exception {
         //region when
         logger.log(new Object());
         logger.close();

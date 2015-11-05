@@ -1,7 +1,6 @@
 package com.acme.edu.unit;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.exceptions.LogWritingException;
 import com.acme.edu.printers.Printable;
 import com.acme.edu.states.IntBufferState;
 import com.acme.edu.states.State;
@@ -27,7 +26,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintOnceAndPrintOneResultForIntBuffer() throws LogWritingException {
+    public void shouldCollMethodPrintOnceAndPrintOneResultForIntBuffer() throws Exception {
         State state = new IntBufferState(printable, decorate);
         when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(6)))
                 .thenReturn("primitive: " + 6);
@@ -41,7 +40,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintOnceAndPrintOnceResultForStringBuffer() throws LogWritingException {
+    public void shouldCollMethodPrintOnceAndPrintOnceResultForStringBuffer() throws Exception {
         State state = new StringBufferState(printable, decorate);
         when(decorate.getDecorateString(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, "str2", String.valueOf(3)))
                 .thenReturn("string: str2 (x3)");
@@ -55,7 +54,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldNotCollMethodPrintForNumber() throws LogWritingException {
+    public void shouldNotCollMethodPrintForNumber() throws Exception {
         State state = new IntBufferState(printable, decorate);
 
         state.flush();
@@ -64,7 +63,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldNotCollMethodPrintForString() throws LogWritingException {
+    public void shouldNotCollMethodPrintForString() throws Exception {
         State state = new StringBufferState(printable, decorate);
 
         state.flush();
@@ -73,7 +72,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintForIntMaxValueMessageTwice() throws LogWritingException {
+    public void shouldCollMethodPrintForIntMaxValueMessageTwice() throws Exception {
         State state = new IntBufferState(printable, decorate);
         when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(Integer.MAX_VALUE)))
                 .thenReturn("primitive: " + Integer.MAX_VALUE);
@@ -89,7 +88,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintForNumberWhenIntBufferIsZero() throws LogWritingException {
+    public void shouldCollMethodPrintForNumberWhenIntBufferIsZero() throws Exception {
         State state = new IntBufferState(printable, decorate);
         when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(0)))
                 .thenReturn("primitive: " + 0);
@@ -101,7 +100,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenMessageIsIntegerMaxValueTwice() throws LogWritingException {
+    public void shouldCollMethodPrintWhenMessageIsIntegerMaxValueTwice() throws Exception {
         State state = new StringBufferState(printable, decorate);
         when(decorate.getDecorateString(STRING_PREFIX, String.valueOf(Integer.MAX_VALUE)))
                 .thenReturn("string: " + Integer.MAX_VALUE);
@@ -117,7 +116,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenMessageIsIntegerMinValueTwice() throws LogWritingException {
+    public void shouldCollMethodPrintWhenMessageIsIntegerMinValueTwice() throws Exception {
         State state = new IntBufferState(printable, decorate);
         when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(-30)))
                 .thenReturn("primitive: " + -30);
@@ -139,7 +138,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenIntegerMessageOverflowPositive() throws LogWritingException {
+    public void shouldCollMethodPrintWhenIntegerMessageOverflowPositive() throws Exception {
         State state = new IntBufferState(printable, decorate);
         when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(Integer.MAX_VALUE - 2)))
                 .thenReturn("primitive: " + (Integer.MAX_VALUE - 2));
@@ -153,7 +152,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenIntegerMessageOverflowNegative() throws LogWritingException {
+    public void shouldCollMethodPrintWhenIntegerMessageOverflowNegative() throws Exception {
         State state = new IntBufferState(printable, decorate);
         when(decorate.getDecorateString(PRIMITIVE_PREFIX, String.valueOf(Integer.MIN_VALUE + 2)))
                 .thenReturn("primitive: " + (Integer.MIN_VALUE + 2));

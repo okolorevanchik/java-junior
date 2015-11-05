@@ -2,7 +2,7 @@ package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
 import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
-import com.acme.edu.exceptions.LogWritingException;
+import com.acme.edu.exceptions.LoggerException;
 import com.acme.edu.printers.Printable;
 
 public class ManagedState {
@@ -20,22 +20,22 @@ public class ManagedState {
         this.defaultState = new UnbufferedState(printable, decorate);
     }
 
-    public State getNumberState(State currentState) throws LogWritingException {
+    public State getNumberState(State currentState) throws LoggerException {
         printBuffer(currentState, numberState);
         return numberState;
     }
 
-    public State getStringState(State currentState) throws LogWritingException {
+    public State getStringState(State currentState) throws LoggerException {
         printBuffer(currentState, stringState);
         return stringState;
     }
 
-    public State getDefaultState(State currentState) throws LogWritingException {
+    public State getDefaultState(State currentState) throws LoggerException {
         printBuffer(currentState, defaultState);
         return defaultState;
     }
 
-    private void printBuffer(State currentState, State checkedState) throws LogWritingException {
+    private void printBuffer(State currentState, State checkedState) throws LoggerException {
         if (currentState != null && currentState != checkedState) {
             currentState.flush();
         }

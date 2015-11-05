@@ -2,7 +2,7 @@ package com.acme.edu;
 
 import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
 import com.acme.edu.exceptions.IncorrectInputsParametersMethodException;
-import com.acme.edu.exceptions.LogWritingException;
+import com.acme.edu.exceptions.LoggerException;
 import com.acme.edu.states.ManagedState;
 import com.acme.edu.states.State;
 
@@ -53,7 +53,7 @@ public class Logger {
      *
      * @param message The int to be summing or printed.
      */
-    public void log(int message) throws LogWritingException {
+    public void log(int message) throws LoggerException {
         currentState = managedState.getNumberState(currentState);
         currentState.log(String.valueOf(message));
 
@@ -64,7 +64,7 @@ public class Logger {
      *
      * @param message The char to be printed.
      */
-    public void log(char message) throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void log(char message) throws LoggerException {
         printDefaultMessage(CHAR_PREFIX, String.valueOf(message));
     }
 
@@ -73,7 +73,7 @@ public class Logger {
      *
      * @param message The boolean to be printed.
      */
-    public void log(boolean message) throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void log(boolean message) throws LoggerException {
         printDefaultMessage(PRIMITIVE_PREFIX, String.valueOf(message));
     }
 
@@ -82,7 +82,7 @@ public class Logger {
      *
      * @param message The string to be printed.
      */
-    public void log(String message) throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void log(String message) throws LoggerException {
         checkNullObjectOrEmptyString(message);
         currentState = managedState.getStringState(currentState);
         currentState.log(message);
@@ -94,7 +94,7 @@ public class Logger {
      *
      * @param messages The array integers to be printed.
      */
-    public void log(int... messages) throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void log(int... messages) throws LoggerException {
         printDefaultMessage(NOT_PREFIX, getSumOfNumbersInArray(messages));
     }
 
@@ -103,7 +103,7 @@ public class Logger {
      *
      * @param matrixMessages The matrix to be printed.
      */
-    public void log(int[][] matrixMessages) throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void log(int[][] matrixMessages) throws LoggerException {
         printDefaultMessage(PRIMITIVES_MATRIX_PREFIX, printMatrix(matrixMessages));
     }
 
@@ -112,7 +112,7 @@ public class Logger {
      *
      * @param multimatrixMessages The multimatrix to be printed.
      */
-    public void log(int[][][][] multimatrixMessages) throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void log(int[][][][] multimatrixMessages) throws LoggerException {
         printDefaultMessage(PRIMITIVES_MULTIMATRIX_PREFIX, printMultimatrix(multimatrixMessages));
     }
 
@@ -121,7 +121,7 @@ public class Logger {
      *
      * @param messages The strings to be printed.
      */
-    public void log(String... messages) throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void log(String... messages) throws LoggerException {
         printDefaultMessage(NOT_PREFIX, arrayStringToString(messages));
     }
 
@@ -130,7 +130,7 @@ public class Logger {
      *
      * @param message The object reference to be printed.
      */
-    public void log(Object message) throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void log(Object message) throws LoggerException {
         printDefaultMessage(REFERENCE_PREFIX, message.toString());
     }
 
@@ -138,16 +138,15 @@ public class Logger {
      * Displays the residual data to the console.
      * Called before the cessation of work with logger.
      */
-    public void close() throws LogWritingException {
+    public void close() throws LoggerException {
         currentState.flush();
     }
 
-    private void printDefaultMessage(String prefix, String message) throws LogWritingException, IncorrectInputsParametersMethodException {
+    private void printDefaultMessage(String prefix, String message) throws LoggerException {
         checkNullObjectOrEmptyString(message);
         currentState = managedState.getDefaultState(currentState);
         String result = currentState.getDecorate().getDecorateString(prefix, message);
         currentState.log(result);
-
     }
 
     private void checkNullObjectOrEmptyString(Object message) throws IncorrectInputsParametersMethodException {

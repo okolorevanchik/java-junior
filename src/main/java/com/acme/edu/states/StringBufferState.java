@@ -1,7 +1,7 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.exceptions.LogWritingException;
+import com.acme.edu.exceptions.LoggerException;
 import com.acme.edu.printers.Printable;
 
 public class StringBufferState extends State {
@@ -18,7 +18,7 @@ public class StringBufferState extends State {
 
 
     @Override
-    public void flush() throws LogWritingException {
+    public void flush() throws LoggerException {
         if (buffer.isEmpty()) {
             return;
         }
@@ -34,7 +34,7 @@ public class StringBufferState extends State {
     }
 
     @Override
-    public void log(String message) throws LogWritingException {
+    public void log(String message) throws LoggerException {
         if (buffer.equals(message)) {
             count++;
         } else {

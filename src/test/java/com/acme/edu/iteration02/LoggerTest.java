@@ -3,9 +3,6 @@ package com.acme.edu.iteration02;
 import com.acme.edu.Decorate;
 import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
-import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
-import com.acme.edu.exceptions.IncorrectInputsParametersMethodException;
-import com.acme.edu.exceptions.LogWritingException;
 import com.acme.edu.printers.ConsolePrinter;
 import com.acme.edu.printers.Printable;
 import com.acme.edu.states.ManagedState;
@@ -13,8 +10,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.IOException;
 
 @Ignore
 public class LoggerTest implements SysoutCaptureAndAssertionAbility {
@@ -27,7 +22,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
     //region given
     @Before
-    public void setUpSystemOut() throws IOException, IncorrectArgumentsConstructorException {
+    public void setUpSystemOut() throws Exception {
         resetOut();
         captureSysout();
         logger = new Logger(new ManagedState(PRINTABLE, DECORATE));
@@ -35,12 +30,12 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     //endregion
 
     @After
-    public void setUpResetOut() throws IOException {
+    public void setUpResetOut() throws Exception {
         resetOut();
     }
 
     @Test
-    public void shouldLogSequentIntegersAsSum() throws IOException, LogWritingException, IncorrectInputsParametersMethodException {
+    public void shouldLogSequentIntegersAsSum() throws Exception {
         //region when
         logger.log("str 1");
         logger.log(1);
@@ -62,7 +57,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
 
     @Test
-    public void shouldLogCorrectlyIntegerOverflowWhenSequentIntegers() throws LogWritingException, IncorrectInputsParametersMethodException {
+    public void shouldLogCorrectlyIntegerOverflowWhenSequentIntegers() throws Exception {
         //region when
         logger.log("str 1");
         logger.log(10);
@@ -84,7 +79,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogSameSubsequentStringsWithoutRepeat() throws IOException, IncorrectInputsParametersMethodException, LogWritingException {
+    public void shouldLogSameSubsequentStringsWithoutRepeat() throws Exception {
         //region when
         logger.log("str 1");
         logger.log("str 2");

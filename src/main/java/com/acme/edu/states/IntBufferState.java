@@ -1,7 +1,7 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.exceptions.LogWritingException;
+import com.acme.edu.exceptions.LoggerException;
 import com.acme.edu.printers.Printable;
 
 public class IntBufferState extends State {
@@ -15,13 +15,13 @@ public class IntBufferState extends State {
     }
 
     @Override
-    public void flush() throws LogWritingException {
+    public void flush() throws LoggerException {
         getPrintable().print(getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer)));
         buffer = 0;
     }
 
     @Override
-    public void log(String message) throws LogWritingException {
+    public void log(String message) throws LoggerException {
         int intMessage = Integer.parseInt(message);
         if (checkOverflow(buffer + (long) intMessage)) {
             getPrintable().print(getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer)));
