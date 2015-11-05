@@ -134,11 +134,18 @@ public class Logger {
     }
 
     private void printDefaultMessage(String prefix, String message) {
-        currentState = managedState.getDefaultState(currentState);
-        currentState.log(currentState.getDecorate().getDecorateString(prefix, message));
+        if (message != null) {
+            currentState = managedState.getDefaultState(currentState);
+            String result = currentState.getDecorate().getDecorateString(prefix, message);
+            currentState.log(result);
+        }
     }
 
     private String getSumOfNumbersInArray(int[] messages) {
+        if (messages == null) {
+            return "";
+        }
+
         int sumOfNumbersInArray = 0;
         for (int message : messages) {
             sumOfNumbersInArray += message;
@@ -147,31 +154,47 @@ public class Logger {
     }
 
     private String printMatrix(int[][] arrayMessages) {
+        if (arrayMessages == null) {
+            return "";
+        }
+
         StringBuilder result = new StringBuilder();
         for (int[] arrayMessage : arrayMessages) {
-            result.append(OPEN_BRACKET);
-            for (int message : arrayMessage) {
-                result.append(message).append(", ");
+            if (arrayMessage != null) {
+                result.append(OPEN_BRACKET);
+                for (int message : arrayMessage) {
+                    result.append(message).append(", ");
+                }
+                result.replace(result.length() - 2, result.length(), CLOSE_BRACKET + SEP);
             }
-            result.replace(result.length() - 2, result.length(), CLOSE_BRACKET + SEP);
         }
         return result.toString();
     }
 
     private String printMultimatrix(int[][][][] multimatrixMessages) {
+        if (multimatrixMessages == null) {
+            return "";
+        }
+
         StringBuilder result = new StringBuilder(OPEN_BRACKET + SEP);
         for (int[][][] multimatrix : multimatrixMessages) {
-            result.append(OPEN_BRACKET).append(SEP);
-            for (int[][] matrix : multimatrix) {
-                result.append(printMatrix(matrix));
+            if (multimatrix != null) {
+                result.append(OPEN_BRACKET).append(SEP);
+                for (int[][] matrix : multimatrix) {
+                    result.append(printMatrix(matrix));
+                }
+                result.append(CLOSE_BRACKET).append(SEP);
             }
-            result.append(CLOSE_BRACKET).append(SEP);
         }
         result.append(CLOSE_BRACKET).append(SEP);
         return result.toString();
     }
 
     private String arrayStringToString(String... messages) {
+        if (messages == null) {
+            return "";
+        }
+
         StringBuilder result = new StringBuilder();
         for (String message : messages) {
             result.append(message).append(SEP);
