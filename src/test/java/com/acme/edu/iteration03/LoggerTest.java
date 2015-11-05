@@ -1,6 +1,10 @@
 package com.acme.edu.iteration03;
 
-import com.acme.edu.*;
+import com.acme.edu.Decorate;
+import com.acme.edu.Logger;
+import com.acme.edu.SysoutCaptureAndAssertionAbility;
+import com.acme.edu.printers.ConsolePrinter;
+import com.acme.edu.printers.Printable;
 import com.acme.edu.states.ManagedState;
 import org.junit.After;
 import org.junit.Before;

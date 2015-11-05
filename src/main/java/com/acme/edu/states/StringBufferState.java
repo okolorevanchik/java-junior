@@ -1,7 +1,7 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.Printable;
+import com.acme.edu.printers.Printable;
 
 public class StringBufferState extends State {
 
@@ -24,7 +24,7 @@ public class StringBufferState extends State {
 
         if (count > 1) {
             getPrintable().print(getDecorate()
-                            .getDecorateString(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, String.valueOf(count)));
+                    .getDecorateString(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, String.valueOf(count)));
             count = 1;
         } else {
             getPrintable().print(getDecorate().getDecorateString(STRING_PREFIX, buffer));

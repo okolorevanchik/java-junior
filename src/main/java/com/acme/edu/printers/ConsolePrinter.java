@@ -1,4 +1,4 @@
-package com.acme.edu;
+package com.acme.edu.printers;
 
 /**
  * @author Tolchinskiy Dmitriy

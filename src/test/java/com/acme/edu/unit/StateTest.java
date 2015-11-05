@@ -1,7 +1,7 @@
 package com.acme.edu.unit;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.Printable;
+import com.acme.edu.printers.Printable;
 import com.acme.edu.states.IntBufferState;
 import com.acme.edu.states.State;
 import com.acme.edu.states.StringBufferState;

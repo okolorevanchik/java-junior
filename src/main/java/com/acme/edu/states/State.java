@@ -1,7 +1,7 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.Printable;
+import com.acme.edu.printers.Printable;
 
 public abstract class State {
 
