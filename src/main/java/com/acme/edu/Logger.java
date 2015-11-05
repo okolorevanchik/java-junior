@@ -1,5 +1,6 @@
 package com.acme.edu;
 
+import com.acme.edu.states.ManagedState;
 import com.acme.edu.states.State;
 
 /**
@@ -33,11 +34,11 @@ public class Logger {
     private static final String OPEN_BRACKET = "{";
     private static final String CLOSE_BRACKET = "}";
 
-    private StateFactory stateFactory;
+    private ManagedState managedState;
     private State currentState;
 
-    public Logger(StateFactory stateFactory) {
-        this.stateFactory = stateFactory;
+    public Logger(ManagedState managedState) {
+        this.managedState = managedState;
     }
 
     /**
@@ -47,7 +48,7 @@ public class Logger {
      * @param message The int to be summing or printed.
      */
     public void log(int message) {
-        currentState = stateFactory.getNumberState(currentState);
+        currentState = managedState.getNumberState(currentState);
         currentState.log(String.valueOf(message));
     }
 
@@ -75,7 +76,7 @@ public class Logger {
      * @param message The string to be printed.
      */
     public void log(String message) {
-        currentState = stateFactory.getStringState(currentState);
+        currentState = managedState.getStringState(currentState);
         currentState.log(message);
     }
 
@@ -133,7 +134,7 @@ public class Logger {
     }
 
     private void printDefaultMessage(String prefix, String message) {
-        currentState = stateFactory.getDefaultState(currentState);
+        currentState = managedState.getDefaultState(currentState);
         String result = String.format(prefix, message);
         currentState.log(result);
     }
