@@ -1,9 +1,9 @@
 package com.acme.edu.unit;
 
 import com.acme.edu.Printable;
-import com.acme.edu.states.NumberState;
+import com.acme.edu.states.IntBufferState;
 import com.acme.edu.states.State;
-import com.acme.edu.states.StringState;
+import com.acme.edu.states.StringBufferState;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,49 +20,49 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintOnceAndPrintOneResultForIntBuffer() {
-        State state = new NumberState(printable);
+        State state = new IntBufferState(printable);
 
         state.log(String.valueOf(2));
         state.log(String.valueOf(2));
         state.log(String.valueOf(2));
-        state.displayBuffer();
+        state.flush();
 
         verify(printable, times(1)).print("primitive: 6");
     }
 
     @Test
     public void shouldCollMethodPrintOnceAndPrintOnceResultForStringBuffer() {
-        State state = new StringState(printable);
+        State state = new StringBufferState(printable);
 
         state.log("str2");
         state.log("str2");
         state.log("str2");
-        state.displayBuffer();
+        state.flush();
 
         verify(printable, times(1)).print("string: str2 (x3)");
     }
 
     @Test
     public void shouldNotCollMethodPrintForNumber() {
-        State state = new NumberState(printable);
+        State state = new IntBufferState(printable);
 
-        state.displayBuffer();
+        state.flush();
 
         verify(printable, times(0)).print("");
     }
 
     @Test
     public void shouldNotCollMethodPrintForString() {
-        State state = new StringState(printable);
+        State state = new StringBufferState(printable);
 
-        state.displayBuffer();
+        state.flush();
 
         verify(printable, times(0)).print("");
     }
 
     @Test
     public void shouldCollMethodPrintForIntMaxValueMessageTwice() {
-        State state = new NumberState(printable);
+        State state = new IntBufferState(printable);
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
@@ -73,21 +73,21 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintForNumberWhenIntBufferIsZero() {
-        State state = new NumberState(printable);
+        State state = new IntBufferState(printable);
 
         state.log(String.valueOf(0));
-        state.displayBuffer();
+        state.flush();
 
         verify(printable, times(1)).print("primitive: 0");
     }
 
     @Test
     public void shouldCollMethodPrintForNumberWhenIntBufferIsNotZero() {
-        State state = new NumberState(printable);
+        State state = new IntBufferState(printable);
 
         state.log(String.valueOf(10));
         state.log(String.valueOf(0));
-        state.displayBuffer();
+        state.flush();
 
         verify(printable, times(1)).print("primitive: 0");
         verify(printable, times(1)).print("primitive: 10");
@@ -95,11 +95,11 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintWhenMessageIsIntegerMaxValueTwice() {
-        State state = new StringState(printable);
+        State state = new StringBufferState(printable);
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
-        state.displayBuffer();
+        state.flush();
 
         verify(printable, times(1)).print("string: 10");
         verify(printable, times(1)).print("string: " + Integer.MAX_VALUE);
@@ -107,12 +107,12 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintWhenIntegerMessageOverflow() {
-        State state = new NumberState(printable);
+        State state = new IntBufferState(printable);
 
         state.log(String.valueOf(Integer.MAX_VALUE - 1));
         state.log(String.valueOf(-1));
         state.log(String.valueOf(10));
-        state.displayBuffer();
+        state.flush();
 
         verify(printable, times(1)).print("primitive: " + (Integer.MAX_VALUE - 2));
     }

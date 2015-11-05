@@ -1,9 +1,9 @@
 package com.acme.edu;
 
-import com.acme.edu.states.DefaultState;
-import com.acme.edu.states.NumberState;
+import com.acme.edu.states.UnbufferedState;
+import com.acme.edu.states.IntBufferState;
 import com.acme.edu.states.State;
-import com.acme.edu.states.StringState;
+import com.acme.edu.states.StringBufferState;
 
 public class StateFactory {
 
@@ -12,9 +12,9 @@ public class StateFactory {
     private State defaultState;
 
     public StateFactory(Printable printable) {
-        this.numberState = new NumberState(printable);
-        this.stringState = new StringState(printable);
-        this.defaultState = new DefaultState(printable);
+        this.numberState = new IntBufferState(printable);
+        this.stringState = new StringBufferState(printable);
+        this.defaultState = new UnbufferedState(printable);
     }
 
     public State getNumberState(State currentState) {
@@ -34,7 +34,7 @@ public class StateFactory {
 
     private void printBuffer(State currentState, State checkedState) {
         if (currentState != null && currentState != checkedState) {
-            currentState.displayBuffer();
+            currentState.flush();
         }
     }
 }

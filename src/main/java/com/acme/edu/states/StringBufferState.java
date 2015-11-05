@@ -2,7 +2,7 @@ package com.acme.edu.states;
 
 import com.acme.edu.Printable;
 
-public class StringState implements State {
+public class StringBufferState implements State {
 
     private static final String STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX = "string: %s (x%d)";
     private static final String STRING_PREFIX = "string: ";
@@ -11,13 +11,13 @@ public class StringState implements State {
     private int count = 1;
     private Printable printable;
 
-    public StringState(Printable printable) {
+    public StringBufferState(Printable printable) {
         this.printable = printable;
     }
 
 
     @Override
-    public void displayBuffer() {
+    public void flush() {
         if (buffer.isEmpty()) {
             return;
         }
@@ -36,7 +36,7 @@ public class StringState implements State {
         if (buffer.equals(message)) {
             count++;
         } else {
-            displayBuffer();
+            flush();
             buffer = message;
         }
     }

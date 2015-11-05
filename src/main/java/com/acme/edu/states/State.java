@@ -1,7 +1,7 @@
 package com.acme.edu.states;
 
 public interface State {
-    void displayBuffer();
+    void flush();
 
     void log(String message);
 }

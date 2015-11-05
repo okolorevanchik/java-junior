@@ -2,16 +2,16 @@ package com.acme.edu.states;
 
 import com.acme.edu.Printable;
 
-public class DefaultState implements State {
+public class UnbufferedState implements State {
 
     private Printable printable;
 
-    public DefaultState(Printable printable) {
+    public UnbufferedState(Printable printable) {
         this.printable = printable;
     }
 
     @Override
-    public void displayBuffer() {
+    public void flush() {
     }
 
     @Override

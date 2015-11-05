@@ -129,7 +129,7 @@ public class Logger {
      * Called before the cessation of work with logger.
      */
     public void close() {
-        currentState.displayBuffer();
+        currentState.flush();
     }
 
     private void printDefaultMessage(String prefix, String message) {

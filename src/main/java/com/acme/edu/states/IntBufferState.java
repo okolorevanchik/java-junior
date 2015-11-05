@@ -2,19 +2,19 @@ package com.acme.edu.states;
 
 import com.acme.edu.Printable;
 
-public class NumberState implements State {
+public class IntBufferState implements State {
 
     private static final String PRIMITIVE_PREFIX = "primitive: ";
 
     private int buffer = 0;
     private Printable printable;
 
-    public NumberState(Printable printable) {
+    public IntBufferState(Printable printable) {
         this.printable = printable;
     }
 
     @Override
-    public void displayBuffer() {
+    public void flush() {
         if (buffer == 0) {
             return;
         }
