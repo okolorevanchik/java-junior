@@ -1,20 +1,18 @@
 package com.acme.edu.iteration01;
 
-import com.acme.edu.ConsolePrinter;
-import com.acme.edu.Logger;
+import com.acme.edu.*;
 import com.acme.edu.states.ManagedState;
-import com.acme.edu.SysoutCaptureAndAssertionAbility;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 
-@Ignore
 public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
     private static final String SEP = System.lineSeparator();
+    private static final Printable PRINTABLE = new ConsolePrinter();
+    private static final Decorate DECORATE = String::format;
     
     private Logger logger;
 
@@ -23,7 +21,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     public void setUpSystemOut() throws IOException {
         resetOut();
         captureSysout();
-        logger = new Logger(new ManagedState(new ConsolePrinter()));
+        logger = new Logger(new ManagedState(PRINTABLE, DECORATE));
     }
     //endregion
 

@@ -1,21 +1,21 @@
 package com.acme.edu.states;
 
+import com.acme.edu.Decorate;
 import com.acme.edu.Printable;
 
-public class IntBufferState implements State {
+public class IntBufferState extends State {
 
-    private static final String PRIMITIVE_PREFIX = "primitive: ";
+    private static final String PRIMITIVE_PREFIX = "primitive: %s";
 
     private int buffer = 0;
-    private Printable printable;
 
-    public IntBufferState(Printable printable) {
-        this.printable = printable;
+    public IntBufferState(Printable printable, Decorate decorate) {
+        super(decorate, printable);
     }
 
     @Override
     public void flush() {
-        printable.print(PRIMITIVE_PREFIX + buffer);
+        getPrintable().print(getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer)));
         buffer = 0;
     }
 
@@ -23,7 +23,7 @@ public class IntBufferState implements State {
     public void log(String message) {
         int intMessage = Integer.parseInt(message);
         if (checkOverflow(buffer + (long) intMessage)) {
-            printable.print(PRIMITIVE_PREFIX + buffer);
+            getPrintable().print(getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer)));
             buffer = intMessage;
         } else {
             buffer += intMessage;

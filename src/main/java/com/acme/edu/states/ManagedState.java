@@ -1,5 +1,6 @@
 package com.acme.edu.states;
 
+import com.acme.edu.Decorate;
 import com.acme.edu.Printable;
 
 public class ManagedState {
@@ -8,10 +9,10 @@ public class ManagedState {
     private State stringState;
     private State defaultState;
 
-    public ManagedState(Printable printable) {
-        this.numberState = new IntBufferState(printable);
-        this.stringState = new StringBufferState(printable);
-        this.defaultState = new UnbufferedState(printable);
+    public ManagedState(Printable printable, Decorate decorate) {
+        this.numberState = new IntBufferState(printable, decorate);
+        this.stringState = new StringBufferState(printable, decorate);
+        this.defaultState = new UnbufferedState(printable, decorate);
     }
 
     public State getNumberState(State currentState) {

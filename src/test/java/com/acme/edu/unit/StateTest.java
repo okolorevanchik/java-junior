@@ -1,5 +1,6 @@
 package com.acme.edu.unit;
 
+import com.acme.edu.Decorate;
 import com.acme.edu.Printable;
 import com.acme.edu.states.IntBufferState;
 import com.acme.edu.states.State;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.*;
 public class StateTest {
 
     private Printable printable;
+    private Decorate decorate = String::format;
 
     @Before
     public void setUp() {
@@ -20,7 +22,7 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintOnceAndPrintOneResultForIntBuffer() {
-        State state = new IntBufferState(printable);
+        State state = new IntBufferState(printable, decorate);
 
         state.log(String.valueOf(2));
         state.log(String.valueOf(2));
@@ -32,7 +34,7 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintOnceAndPrintOnceResultForStringBuffer() {
-        State state = new StringBufferState(printable);
+        State state = new StringBufferState(printable, decorate);
 
         state.log("str2");
         state.log("str2");
@@ -44,7 +46,7 @@ public class StateTest {
 
     @Test
     public void shouldNotCollMethodPrintForNumber() {
-        State state = new IntBufferState(printable);
+        State state = new IntBufferState(printable, decorate);
 
         state.flush();
 
@@ -53,7 +55,7 @@ public class StateTest {
 
     @Test
     public void shouldNotCollMethodPrintForString() {
-        State state = new StringBufferState(printable);
+        State state = new StringBufferState(printable, decorate);
 
         state.flush();
 
@@ -62,7 +64,7 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintForIntMaxValueMessageTwice() {
-        State state = new IntBufferState(printable);
+        State state = new IntBufferState(printable, decorate);
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
@@ -74,7 +76,7 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintForNumberWhenIntBufferIsZero() {
-        State state = new IntBufferState(printable);
+        State state = new IntBufferState(printable, decorate);
 
         state.log(String.valueOf(0));
         state.flush();
@@ -84,7 +86,7 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintWhenMessageIsIntegerMaxValueTwice() {
-        State state = new StringBufferState(printable);
+        State state = new StringBufferState(printable, decorate);
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
@@ -96,7 +98,7 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintWhenMessageIsIntegerMinValueTwice() {
-        State state = new IntBufferState(printable);
+        State state = new IntBufferState(printable, decorate);
 
         state.log("-10");
         state.log("-20");
@@ -112,7 +114,7 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintWhenIntegerMessageOverflowPositive() {
-        State state = new IntBufferState(printable);
+        State state = new IntBufferState(printable, decorate);
 
         state.log(String.valueOf(Integer.MAX_VALUE - 1));
         state.log(String.valueOf(-1));
@@ -124,7 +126,7 @@ public class StateTest {
 
     @Test
     public void shouldCollMethodPrintWhenIntegerMessageOverflowNegative() {
-        State state = new IntBufferState(printable);
+        State state = new IntBufferState(printable, decorate);
 
         state.log(String.valueOf(Integer.MIN_VALUE + 1));
         state.log(String.valueOf(1));

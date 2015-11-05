@@ -135,8 +135,7 @@ public class Logger {
 
     private void printDefaultMessage(String prefix, String message) {
         currentState = managedState.getDefaultState(currentState);
-        String result = String.format(prefix, message);
-        currentState.log(result);
+        currentState.log(currentState.getDecorate().getDecorateString(prefix, message));
     }
 
     private String getSumOfNumbersInArray(int[] messages) {

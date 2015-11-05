@@ -1,18 +1,18 @@
 package com.acme.edu.states;
 
+import com.acme.edu.Decorate;
 import com.acme.edu.Printable;
 
-public class StringBufferState implements State {
+public class StringBufferState extends State {
 
-    private static final String STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX = "string: %s (x%d)";
-    private static final String STRING_PREFIX = "string: ";
+    private static final String STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX = "string: %s (x%s)";
+    private static final String STRING_PREFIX = "string: %s";
 
     private String buffer = "";
     private int count = 1;
-    private Printable printable;
 
-    public StringBufferState(Printable printable) {
-        this.printable = printable;
+    public StringBufferState(Printable printable, Decorate decorate) {
+        super(decorate, printable);
     }
 
 
@@ -23,10 +23,11 @@ public class StringBufferState implements State {
         }
 
         if (count > 1) {
-            printable.print(String.format(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, count));
+            getPrintable().print(getDecorate()
+                            .getDecorateString(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, String.valueOf(count)));
             count = 1;
         } else {
-            printable.print(STRING_PREFIX + buffer);
+            getPrintable().print(getDecorate().getDecorateString(STRING_PREFIX, buffer));
         }
         buffer = "";
     }
