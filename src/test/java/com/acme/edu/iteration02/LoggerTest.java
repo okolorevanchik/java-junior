@@ -3,8 +3,7 @@ package com.acme.edu.iteration02;
 import com.acme.edu.Decorate;
 import com.acme.edu.Logger;
 import com.acme.edu.SysoutCaptureAndAssertionAbility;
-import com.acme.edu.exceptions.SendingDataOverNetworkException;
-import com.acme.edu.exceptions.WritingDataToFileException;
+import com.acme.edu.exceptions.*;
 import com.acme.edu.printers.ConsolePrinter;
 import com.acme.edu.printers.Printable;
 import com.acme.edu.states.ManagedState;
@@ -26,7 +25,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
     //region given
     @Before
-    public void setUpSystemOut() throws IOException {
+    public void setUpSystemOut() throws IOException, IncorrectArgumentsConstructorException {
         resetOut();
         captureSysout();
         logger = new Logger(new ManagedState(PRINTABLE, DECORATE));
@@ -39,7 +38,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogSequentIntegersAsSum() throws IOException {
+    public void shouldLogSequentIntegersAsSum() throws IOException, LogWritingException, IncorrectInputsParametersMethodException {
         //region when
         logger.log("str 1");
         logger.log(1);
@@ -61,7 +60,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
 
     @Test
-    public void shouldLogCorrectlyIntegerOverflowWhenSequentIntegers() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldLogCorrectlyIntegerOverflowWhenSequentIntegers() throws LogWritingException, IncorrectInputsParametersMethodException {
         //region when
         logger.log("str 1");
         logger.log(10);
@@ -83,7 +82,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     }
 
     @Test
-    public void shouldLogSameSubsequentStringsWithoutRepeat() throws IOException {
+    public void shouldLogSameSubsequentStringsWithoutRepeat() throws IOException, IncorrectInputsParametersMethodException, LogWritingException {
         //region when
         logger.log("str 1");
         logger.log("str 2");

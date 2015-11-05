@@ -1,8 +1,7 @@
 package com.acme.edu.unit;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.exceptions.SendingDataOverNetworkException;
-import com.acme.edu.exceptions.WritingDataToFileException;
+import com.acme.edu.exceptions.LogWritingException;
 import com.acme.edu.printers.Printable;
 import com.acme.edu.states.IntBufferState;
 import com.acme.edu.states.State;
@@ -23,7 +22,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintOnceAndPrintOneResultForIntBuffer() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldCollMethodPrintOnceAndPrintOneResultForIntBuffer() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
 
         state.log(String.valueOf(2));
@@ -35,7 +34,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintOnceAndPrintOnceResultForStringBuffer() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldCollMethodPrintOnceAndPrintOnceResultForStringBuffer() throws LogWritingException {
         State state = new StringBufferState(printable, decorate);
 
         state.log("str2");
@@ -47,7 +46,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldNotCollMethodPrintForNumber() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldNotCollMethodPrintForNumber() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
 
         state.flush();
@@ -56,7 +55,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldNotCollMethodPrintForString() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldNotCollMethodPrintForString() throws LogWritingException {
         State state = new StringBufferState(printable, decorate);
 
         state.flush();
@@ -65,7 +64,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintForIntMaxValueMessageTwice() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldCollMethodPrintForIntMaxValueMessageTwice() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
 
         state.log("10");
@@ -77,7 +76,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintForNumberWhenIntBufferIsZero() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldCollMethodPrintForNumberWhenIntBufferIsZero() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
 
         state.log(String.valueOf(0));
@@ -87,7 +86,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenMessageIsIntegerMaxValueTwice() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldCollMethodPrintWhenMessageIsIntegerMaxValueTwice() throws LogWritingException {
         State state = new StringBufferState(printable, decorate);
 
         state.log("10");
@@ -99,7 +98,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenMessageIsIntegerMinValueTwice() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldCollMethodPrintWhenMessageIsIntegerMinValueTwice() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
 
         state.log("-10");
@@ -115,7 +114,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenIntegerMessageOverflowPositive() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldCollMethodPrintWhenIntegerMessageOverflowPositive() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
 
         state.log(String.valueOf(Integer.MAX_VALUE - 1));
@@ -127,7 +126,7 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenIntegerMessageOverflowNegative() throws WritingDataToFileException, SendingDataOverNetworkException {
+    public void shouldCollMethodPrintWhenIntegerMessageOverflowNegative() throws LogWritingException {
         State state = new IntBufferState(printable, decorate);
 
         state.log(String.valueOf(Integer.MIN_VALUE + 1));
