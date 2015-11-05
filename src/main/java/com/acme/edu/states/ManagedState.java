@@ -13,7 +13,7 @@ public class ManagedState {
 
     public ManagedState(Printable printable, Decorate decorate) throws IncorrectArgumentsConstructorException {
         if (printable == null || decorate == null) {
-            throw new IncorrectArgumentsConstructorException();
+            throw new IncorrectArgumentsConstructorException("Constructor parameter can not be null.");
         }
         this.numberState = new IntBufferState(printable, decorate);
         this.stringState = new StringBufferState(printable, decorate);

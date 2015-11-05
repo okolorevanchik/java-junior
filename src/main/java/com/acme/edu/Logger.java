@@ -40,7 +40,7 @@ public class Logger {
 
     public Logger(ManagedState managedState) throws IncorrectArgumentsConstructorException {
         if (managedState == null) {
-            throw new IncorrectArgumentsConstructorException();
+            throw new IncorrectArgumentsConstructorException("Constructor parameter can not be null.");
         }
         this.managedState = managedState;
     }
@@ -150,7 +150,7 @@ public class Logger {
 
     private void checkNullObjectOrEmptyString(Object message) throws IncorrectInputsParametersMethodException {
         if (message == null || message.toString().isEmpty()) {
-            throw new IncorrectInputsParametersMethodException();
+            throw new IncorrectInputsParametersMethodException("Input parameters is null or empty.");
         }
     }
 
