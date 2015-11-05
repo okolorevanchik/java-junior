@@ -36,8 +36,8 @@ public class Logger {
     private StateFactory stateFactory;
     private State currentState;
 
-    public Logger(Printable printable) {
-        this.stateFactory = new StateFactory(printable);
+    public Logger(StateFactory stateFactory) {
+        this.stateFactory = stateFactory;
     }
 
     /**
