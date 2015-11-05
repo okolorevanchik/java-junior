@@ -11,10 +11,6 @@ public class UnbufferedState extends State {
     }
 
     @Override
-    public void flush() {
-    }
-
-    @Override
     public void log(String message) throws PrintDataException {
         getPrintable().print(message);
     }

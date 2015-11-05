@@ -22,7 +22,8 @@ public abstract class State {
         return decorate;
     }
 
-    public abstract void flush() throws PrintDataException;
+    public void flush() throws PrintDataException {
+    }
 
     public abstract void log(String message) throws PrintDataException;
 }
