@@ -66,6 +66,7 @@ public class StateTest {
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
+        state.flush();
 
         verify(printable, times(1)).print("primitive: " + Integer.MAX_VALUE);
         verify(printable, times(1)).print("primitive: 10");
@@ -82,18 +83,6 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintForNumberWhenIntBufferIsNotZero() {
-        State state = new IntBufferState(printable);
-
-        state.log(String.valueOf(10));
-        state.log(String.valueOf(0));
-        state.flush();
-
-        verify(printable, times(1)).print("primitive: 0");
-        verify(printable, times(1)).print("primitive: 10");
-    }
-
-    @Test
     public void shouldCollMethodPrintWhenMessageIsIntegerMaxValueTwice() {
         State state = new StringBufferState(printable);
 
@@ -106,7 +95,23 @@ public class StateTest {
     }
 
     @Test
-    public void shouldCollMethodPrintWhenIntegerMessageOverflow() {
+    public void shouldCollMethodPrintWhenMessageIsIntegerMinValueTwice() {
+        State state = new IntBufferState(printable);
+
+        state.log("-10");
+        state.log("-20");
+        state.log(String.valueOf(Integer.MIN_VALUE));
+        state.log("-20");
+        state.log("-100500");
+        state.flush();
+
+        verify(printable, times(1)).print("primitive: " + String.valueOf(-30));
+        verify(printable, times(1)).print("primitive: " + Integer.MIN_VALUE);
+        verify(printable, times(1)).print("primitive: " + String.valueOf(-100520));
+    }
+
+    @Test
+    public void shouldCollMethodPrintWhenIntegerMessageOverflowPositive() {
         State state = new IntBufferState(printable);
 
         state.log(String.valueOf(Integer.MAX_VALUE - 1));
@@ -115,5 +120,17 @@ public class StateTest {
         state.flush();
 
         verify(printable, times(1)).print("primitive: " + (Integer.MAX_VALUE - 2));
+    }
+
+    @Test
+    public void shouldCollMethodPrintWhenIntegerMessageOverflowNegative() {
+        State state = new IntBufferState(printable);
+
+        state.log(String.valueOf(Integer.MIN_VALUE + 1));
+        state.log(String.valueOf(1));
+        state.log(String.valueOf(-10));
+        state.flush();
+
+        verify(printable, times(1)).print("primitive: " + (Integer.MIN_VALUE + 2));
     }
 }
