@@ -1,7 +1,7 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.exceptions.LoggerException;
+import com.acme.edu.exceptions.PrintDataException;
 import com.acme.edu.printers.Printable;
 
 public class UnbufferedState extends State {
@@ -15,7 +15,7 @@ public class UnbufferedState extends State {
     }
 
     @Override
-    public void log(String message) throws LoggerException {
+    public void log(String message) throws PrintDataException {
         getPrintable().print(message);
     }
 }
