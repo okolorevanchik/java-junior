@@ -1,6 +1,8 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
+import com.acme.edu.exceptions.SendingDataOverNetworkException;
+import com.acme.edu.exceptions.WritingDataToFileException;
 import com.acme.edu.printers.Printable;
 
 public class IntBufferState extends State {
@@ -14,13 +16,13 @@ public class IntBufferState extends State {
     }
 
     @Override
-    public void flush() {
+    public void flush() throws WritingDataToFileException, SendingDataOverNetworkException {
         getPrintable().print(getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer)));
         buffer = 0;
     }
 
     @Override
-    public void log(String message) {
+    public void log(String message) throws WritingDataToFileException, SendingDataOverNetworkException {
         int intMessage = Integer.parseInt(message);
         if (checkOverflow(buffer + (long) intMessage)) {
             getPrintable().print(getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer)));

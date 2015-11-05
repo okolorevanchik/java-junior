@@ -1,5 +1,9 @@
 package com.acme.edu;
 
+import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
+import com.acme.edu.exceptions.IncorrectInputsParametersMethodException;
+import com.acme.edu.exceptions.SendingDataOverNetworkException;
+import com.acme.edu.exceptions.WritingDataToFileException;
 import com.acme.edu.states.ManagedState;
 import com.acme.edu.states.State;
 
@@ -38,6 +42,9 @@ public class Logger {
     private State currentState;
 
     public Logger(ManagedState managedState) {
+        if (managedState == null) {
+            throw new IncorrectArgumentsConstructorException();
+        }
         this.managedState = managedState;
     }
 
@@ -47,9 +54,10 @@ public class Logger {
      *
      * @param message The int to be summing or printed.
      */
-    public void log(int message) {
+    public void log(int message) throws WritingDataToFileException, SendingDataOverNetworkException {
         currentState = managedState.getNumberState(currentState);
         currentState.log(String.valueOf(message));
+
     }
 
     /**
@@ -57,7 +65,7 @@ public class Logger {
      *
      * @param message The char to be printed.
      */
-    public void log(char message) {
+    public void log(char message) throws WritingDataToFileException, SendingDataOverNetworkException {
         printDefaultMessage(CHAR_PREFIX, String.valueOf(message));
     }
 
@@ -66,7 +74,7 @@ public class Logger {
      *
      * @param message The boolean to be printed.
      */
-    public void log(boolean message) {
+    public void log(boolean message) throws WritingDataToFileException, SendingDataOverNetworkException {
         printDefaultMessage(PRIMITIVE_PREFIX, String.valueOf(message));
     }
 
@@ -75,9 +83,11 @@ public class Logger {
      *
      * @param message The string to be printed.
      */
-    public void log(String message) {
+    public void log(String message) throws WritingDataToFileException, SendingDataOverNetworkException {
+        checkNullObjectOrEmptyString(message);
         currentState = managedState.getStringState(currentState);
         currentState.log(message);
+
     }
 
     /**
@@ -85,7 +95,7 @@ public class Logger {
      *
      * @param messages The array integers to be printed.
      */
-    public void log(int... messages) {
+    public void log(int... messages) throws WritingDataToFileException, SendingDataOverNetworkException {
         printDefaultMessage(NOT_PREFIX, getSumOfNumbersInArray(messages));
     }
 
@@ -94,7 +104,7 @@ public class Logger {
      *
      * @param matrixMessages The matrix to be printed.
      */
-    public void log(int[][] matrixMessages) {
+    public void log(int[][] matrixMessages) throws WritingDataToFileException, SendingDataOverNetworkException {
         printDefaultMessage(PRIMITIVES_MATRIX_PREFIX, printMatrix(matrixMessages));
     }
 
@@ -103,7 +113,7 @@ public class Logger {
      *
      * @param multimatrixMessages The multimatrix to be printed.
      */
-    public void log(int[][][][] multimatrixMessages) {
+    public void log(int[][][][] multimatrixMessages) throws WritingDataToFileException, SendingDataOverNetworkException {
         printDefaultMessage(PRIMITIVES_MULTIMATRIX_PREFIX, printMultimatrix(multimatrixMessages));
     }
 
@@ -112,7 +122,7 @@ public class Logger {
      *
      * @param messages The strings to be printed.
      */
-    public void log(String... messages) {
+    public void log(String... messages) throws WritingDataToFileException, SendingDataOverNetworkException {
         printDefaultMessage(NOT_PREFIX, arrayStringToString(messages));
     }
 
@@ -121,7 +131,7 @@ public class Logger {
      *
      * @param message The object reference to be printed.
      */
-    public void log(Object message) {
+    public void log(Object message) throws WritingDataToFileException, SendingDataOverNetworkException {
         printDefaultMessage(REFERENCE_PREFIX, message.toString());
     }
 
@@ -129,76 +139,77 @@ public class Logger {
      * Displays the residual data to the console.
      * Called before the cessation of work with logger.
      */
-    public void close() {
+    public void close() throws WritingDataToFileException, SendingDataOverNetworkException {
         currentState.flush();
     }
 
-    private void printDefaultMessage(String prefix, String message) {
-        if (message != null) {
-            currentState = managedState.getDefaultState(currentState);
-            String result = currentState.getDecorate().getDecorateString(prefix, message);
-            currentState.log(result);
+    private void printDefaultMessage(String prefix, String message) throws WritingDataToFileException, SendingDataOverNetworkException {
+        checkNullObjectOrEmptyString(message);
+        currentState = managedState.getDefaultState(currentState);
+        String result = currentState.getDecorate().getDecorateString(prefix, message);
+        currentState.log(result);
+
+    }
+
+    private void checkNullObjectOrEmptyString(Object message) {
+        if (message == null || message.toString().isEmpty()) {
+            throw new IncorrectInputsParametersMethodException();
         }
     }
 
     private String getSumOfNumbersInArray(int[] messages) {
-        if (messages == null) {
-            return "";
-        }
+        checkNullObjectOrEmptyString(messages);
 
         int sumOfNumbersInArray = 0;
         for (int message : messages) {
             sumOfNumbersInArray += message;
         }
+
         return String.valueOf(sumOfNumbersInArray);
     }
 
     private String printMatrix(int[][] arrayMessages) {
-        if (arrayMessages == null) {
-            return "";
-        }
+        checkNullObjectOrEmptyString(arrayMessages);
 
         StringBuilder result = new StringBuilder();
         for (int[] arrayMessage : arrayMessages) {
-            if (arrayMessage != null) {
-                result.append(OPEN_BRACKET);
-                for (int message : arrayMessage) {
-                    result.append(message).append(", ");
-                }
-                result.replace(result.length() - 2, result.length(), CLOSE_BRACKET + SEP);
+            checkNullObjectOrEmptyString(arrayMessages);
+            result.append(OPEN_BRACKET);
+            for (int message : arrayMessage) {
+                result.append(message).append(", ");
             }
+            result.replace(result.length() - 2, result.length(), CLOSE_BRACKET + SEP);
         }
+
         return result.toString();
     }
 
     private String printMultimatrix(int[][][][] multimatrixMessages) {
-        if (multimatrixMessages == null) {
-            return "";
-        }
+        checkNullObjectOrEmptyString(multimatrixMessages);
 
         StringBuilder result = new StringBuilder(OPEN_BRACKET + SEP);
         for (int[][][] multimatrix : multimatrixMessages) {
-            if (multimatrix != null) {
-                result.append(OPEN_BRACKET).append(SEP);
-                for (int[][] matrix : multimatrix) {
-                    result.append(printMatrix(matrix));
-                }
-                result.append(CLOSE_BRACKET).append(SEP);
+            checkNullObjectOrEmptyString(multimatrix);
+            result.append(OPEN_BRACKET).append(SEP);
+            for (int[][] matrix : multimatrix) {
+                result.append(printMatrix(matrix));
             }
+            result.append(CLOSE_BRACKET).append(SEP);
         }
         result.append(CLOSE_BRACKET).append(SEP);
+
         return result.toString();
     }
 
     private String arrayStringToString(String... messages) {
-        if (messages == null) {
-            return "";
-        }
+        checkNullObjectOrEmptyString(messages);
 
         StringBuilder result = new StringBuilder();
         for (String message : messages) {
+            checkNullObjectOrEmptyString(message);
             result.append(message).append(SEP);
         }
+
         return result.toString();
     }
 }

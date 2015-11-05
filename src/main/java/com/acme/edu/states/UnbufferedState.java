@@ -1,6 +1,8 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
+import com.acme.edu.exceptions.SendingDataOverNetworkException;
+import com.acme.edu.exceptions.WritingDataToFileException;
 import com.acme.edu.printers.Printable;
 
 public class UnbufferedState extends State {
@@ -14,7 +16,7 @@ public class UnbufferedState extends State {
     }
 
     @Override
-    public void log(String message) {
+    public void log(String message) throws WritingDataToFileException, SendingDataOverNetworkException {
         getPrintable().print(message);
     }
 }
