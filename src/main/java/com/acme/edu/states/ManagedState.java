@@ -36,7 +36,7 @@ public class ManagedState {
     }
 
     private void printBuffer(State currentState, State checkedState) throws PrintDataException {
-        if (currentState != null && currentState != checkedState) {
+        if (currentState != checkedState) {
             currentState.flush();
         }
     }
