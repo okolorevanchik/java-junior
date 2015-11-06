@@ -1,6 +1,7 @@
 package com.acme.edu.unit;
 
 import com.acme.edu.Decorate;
+import com.acme.edu.exceptions.GetStateException;
 import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
 import com.acme.edu.printers.Printable;
 import com.acme.edu.states.ManagedState;
@@ -29,5 +30,14 @@ public class ManagedStateTest {
     public void shouldThrowIncorrectArgumentsConstructorExceptionWhenSecondArgumentsIsNull() throws Exception {
         new ManagedState(printable, null);
     }
+
+    @Test(expected = GetStateException.class)
+    public void shouldThrowGetStateException() throws Exception {
+        ManagedState managedState = new ManagedState(printable, decorate);
+
+        managedState.getDefaultState(null);
+    }
+
+
 
 }
