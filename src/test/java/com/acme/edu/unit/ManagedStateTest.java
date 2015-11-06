@@ -38,42 +38,42 @@ public class ManagedStateTest {
 
     @Test(expected = GetStateException.class)
     public void shouldThrowGetStateException() throws Exception {
-        managedState.getDefaultState(null);
+        managedState.getUnbufferedState(null);
     }
 
     @Test
     public void shouldCallMethodFlushFromCurrentStateWhenCurrentStateNotEqualNewState() throws Exception {
-        managedState.getNumberState(currentState);
+        managedState.getIntBufferState(currentState);
 
         verify(currentState, times(1)).flush();
     }
 
     @Test
     public void shouldNotCallMethodFlushFromCurrentStateWhenCurrentStateEqualNewState() throws Exception {
-        State newCurrentState = managedState.getDefaultState(currentState);
+        State newCurrentState = managedState.getUnbufferedState(currentState);
         State newCurrentStateMock = mock(newCurrentState.getClass());
-        managedState.getDefaultState(newCurrentState);
+        managedState.getUnbufferedState(newCurrentState);
 
         verify(newCurrentStateMock, times(0)).flush();
     }
 
     @Test
     public void shouldGetIntBufferState() throws Exception {
-        State actualState = managedState.getNumberState(currentState);
+        State actualState = managedState.getIntBufferState(currentState);
 
         assertTrue(actualState instanceof IntBufferState);
     }
 
     @Test
     public void shouldGetStringBufferState() throws Exception {
-        State actualState = managedState.getStringState(currentState);
+        State actualState = managedState.getStringBufferState(currentState);
 
         assertTrue(actualState instanceof StringBufferState);
     }
 
     @Test
     public void shouldGetUnbufferedState() throws Exception {
-        State actualState = managedState.getDefaultState(currentState);
+        State actualState = managedState.getUnbufferedState(currentState);
 
         assertTrue(actualState instanceof UnbufferedState);
     }

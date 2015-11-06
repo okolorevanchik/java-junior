@@ -21,17 +21,17 @@ public class ManagedState {
         this.defaultState = new UnbufferedState(printable, decorate);
     }
 
-    public State getNumberState(State currentState) throws GetStateException {
+    public State getIntBufferState(State currentState) throws GetStateException {
         printBuffer(currentState, numberState);
         return numberState;
     }
 
-    public State getStringState(State currentState) throws GetStateException {
+    public State getStringBufferState(State currentState) throws GetStateException {
         printBuffer(currentState, stringState);
         return stringState;
     }
 
-    public State getDefaultState(State currentState) throws GetStateException {
+    public State getUnbufferedState(State currentState) throws GetStateException {
         printBuffer(currentState, defaultState);
         return defaultState;
     }

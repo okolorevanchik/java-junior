@@ -54,7 +54,7 @@ public class Logger {
      * @param message The int to be summing or printed.
      */
     public void log(int message) throws LoggerException {
-        currentState = managedState.getNumberState(currentState);
+        currentState = managedState.getIntBufferState(currentState);
         currentState.log(String.valueOf(message));
 
     }
@@ -84,7 +84,7 @@ public class Logger {
      */
     public void log(String message) throws LoggerException {
         checkNullObjectOrEmptyString(message);
-        currentState = managedState.getStringState(currentState);
+        currentState = managedState.getStringBufferState(currentState);
         currentState.log(message);
 
     }
@@ -144,7 +144,7 @@ public class Logger {
 
     private void printDefaultMessage(String prefix, String message) throws LoggerException {
         checkNullObjectOrEmptyString(message);
-        currentState = managedState.getDefaultState(currentState);
+        currentState = managedState.getUnbufferedState(currentState);
         String result = currentState.getDecorate().getDecorateString(prefix, message);
         currentState.log(result);
     }
