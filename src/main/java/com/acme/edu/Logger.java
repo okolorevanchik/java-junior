@@ -40,7 +40,7 @@ public class Logger {
     private ManagedState managedState;
     private State currentState;
 
-    public Logger(ManagedState managedState) throws IncorrectArgumentsConstructorException {
+    public Logger(ManagedState managedState) throws LoggerException {
         if (managedState == null) {
             throw new IncorrectArgumentsConstructorException("Constructor parameter can not be null.");
         }
@@ -85,7 +85,6 @@ public class Logger {
         checkNullObjectOrEmptyString(message);
         currentState = managedState.getStringBufferState(currentState);
         currentState.log(message);
-
     }
 
     /**
