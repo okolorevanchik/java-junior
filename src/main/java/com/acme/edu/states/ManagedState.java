@@ -11,13 +11,13 @@ public class ManagedState {
     private State stringState;
     private State defaultState;
 
-    public ManagedState(Printable printable, Decorate decorate) throws IncorrectArgumentsConstructorException {
-        if (printable == null || decorate == null) {
+    public ManagedState(Decorate decorate, Printable... printable) throws IncorrectArgumentsConstructorException {
+        if (printable == null || decorate == null || checkNullVarargsPrintable(printable)) {
             throw new IncorrectArgumentsConstructorException("Constructor parameter can not be null.");
         }
-        this.numberState = new IntBufferState(printable, decorate);
-        this.stringState = new StringBufferState(printable, decorate);
-        this.defaultState = new UnbufferedState(printable, decorate);
+        this.numberState = new IntBufferState(decorate, printable);
+        this.stringState = new StringBufferState(decorate, printable);
+        this.defaultState = new UnbufferedState(decorate, printable);
     }
 
     public State getIntBufferState(State currentState) throws PrintDataException {
@@ -39,5 +39,13 @@ public class ManagedState {
         if (currentState != checkedState) {
             currentState.flush();
         }
+    }
+
+    private boolean checkNullVarargsPrintable(Printable... printables) throws IncorrectArgumentsConstructorException {
+        for (Printable printable: printables) {
+            if (printable == null)
+                return true;
+        }
+        return false;
     }
 }

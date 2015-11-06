@@ -12,7 +12,7 @@ public class StringBufferState extends State {
     private String buffer = "";
     private int count = 1;
 
-    public StringBufferState(Printable printable, Decorate decorate) {
+    public StringBufferState(Decorate decorate, Printable... printable) {
         super(decorate, printable);
     }
 
@@ -23,13 +23,15 @@ public class StringBufferState extends State {
             return;
         }
 
+        String result;
         if (count > 1) {
-            getPrintable().print(getDecorate()
-                    .getDecorateString(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, String.valueOf(count)));
+            result = getDecorate()
+                    .getDecorateString(STRING_WITH_NUMBER_OF_REPETITIONS_PREFIX, buffer, String.valueOf(count));
             count = 1;
         } else {
-            getPrintable().print(getDecorate().getDecorateString(STRING_PREFIX, buffer));
+            result = getDecorate().getDecorateString(STRING_PREFIX, buffer);
         }
+        printAll(result);
         buffer = "";
     }
 

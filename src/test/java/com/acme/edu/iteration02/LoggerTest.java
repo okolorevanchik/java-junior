@@ -25,7 +25,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     public void setUpSystemOut() throws Exception {
         resetOut();
         captureSysout();
-        logger = new Logger(new ManagedState(PRINTABLE, DECORATE));
+        logger = new Logger(new ManagedState(DECORATE, PRINTABLE));
     }
     //endregion
 

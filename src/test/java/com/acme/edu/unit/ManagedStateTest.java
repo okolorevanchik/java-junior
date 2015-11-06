@@ -22,17 +22,17 @@ public class ManagedStateTest {
         printable = mock(Printable.class);
         decorate = mock(Decorate.class);
         currentState = mock(State.class);
-        managedState = new ManagedState(printable, decorate);
+        managedState = new ManagedState(decorate, printable);
     }
 
     @Test(expected = IncorrectArgumentsConstructorException.class)
     public void shouldThrowIncorrectArgumentsConstructorExceptionWhenFirstArgumentsIsNull() throws Exception {
-        new ManagedState(null, decorate);
+        new ManagedState(decorate, null);
     }
 
     @Test(expected = IncorrectArgumentsConstructorException.class)
     public void shouldThrowIncorrectArgumentsConstructorExceptionWhenSecondArgumentsIsNull() throws Exception {
-        new ManagedState(printable, null);
+        new ManagedState(null, printable);
     }
 
     @Test

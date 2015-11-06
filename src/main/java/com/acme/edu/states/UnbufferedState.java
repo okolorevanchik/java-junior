@@ -6,12 +6,12 @@ import com.acme.edu.printers.Printable;
 
 public class UnbufferedState extends State {
 
-    public UnbufferedState(Printable printable, Decorate decorate) {
+    public UnbufferedState(Decorate decorate, Printable... printable) {
         super(decorate, printable);
     }
 
     @Override
     public void log(String message) throws PrintDataException {
-        getPrintable().print(message);
+        printAll(message);
     }
 }

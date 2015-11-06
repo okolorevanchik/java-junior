@@ -7,15 +7,17 @@ import com.acme.edu.printers.Printable;
 public abstract class State {
 
     private Decorate decorate;
-    private Printable printable;
+    private Printable[] printables;
 
-    public State(Decorate decorate, Printable printable) {
+    public State(Decorate decorate, Printable... printable) {
         this.decorate = decorate;
-        this.printable = printable;
+        this.printables = printable;
     }
 
-    public Printable getPrintable() {
-        return printable;
+    protected void printAll(String message) throws PrintDataException {
+        for (Printable printable: printables) {
+            printable.print(message);
+        }
     }
 
     public Decorate getDecorate() {

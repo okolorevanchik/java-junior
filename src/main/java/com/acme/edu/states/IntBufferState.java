@@ -10,13 +10,14 @@ public class IntBufferState extends State {
 
     private int buffer = 0;
 
-    public IntBufferState(Printable printable, Decorate decorate) {
+    public IntBufferState(Decorate decorate, Printable... printable) {
         super(decorate, printable);
     }
 
     @Override
     public void flush() throws PrintDataException {
-        getPrintable().print(getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer)));
+        String result = getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer));
+        printAll(result);
         buffer = 0;
     }
 
@@ -24,7 +25,8 @@ public class IntBufferState extends State {
     public void log(String message) throws PrintDataException {
         int intMessage = Integer.parseInt(message);
         if (checkOverflow(buffer + (long) intMessage)) {
-            getPrintable().print(getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer)));
+            String result = getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer));
+            printAll(result);
             buffer = intMessage;
         } else {
             buffer += intMessage;

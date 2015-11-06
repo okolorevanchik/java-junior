@@ -23,9 +23,6 @@ public class LoggerTest {
     private static final String CLOSE_BRACKET = "}";
 
     private ManagedState managedState;
-    private State intBufferState;
-    private State stringBufferState;
-    private State unbufferedState;
     private State defaultState;
     private Decorate decorate;
 
@@ -33,17 +30,7 @@ public class LoggerTest {
     public void setUp() throws Exception {
         decorate = mock(Decorate.class);
         managedState = mock(ManagedState.class);
-        intBufferState = mock(IntBufferState.class);
-        stringBufferState = mock(StringBufferState.class);
-        unbufferedState = mock(UnbufferedState.class);
         defaultState = mock(State.class);
-
-//        when(managedState.getIntBufferState(defaultState)).thenReturn(intBufferState);
-//        when(managedState.getStringBufferState(defaultState)).thenReturn(stringBufferState);
-//        when(managedState.getUnbufferedState(defaultState)).thenReturn(unbufferedState);
-//
-//        when(managedState.getStringBufferState(null)).thenReturn(stringBufferState);
-//        when(managedState.getUnbufferedState(null)).thenReturn(unbufferedState);
     }
 
     @Test(expected = IncorrectArgumentsConstructorException.class)
@@ -77,11 +64,11 @@ public class LoggerTest {
     @Test
     public void shouldCallMethodLogClassStateForInputParameterIsInt() throws Exception {
         Logger logger = new Logger(managedState);
-        when(managedState.getIntBufferState(any())).thenReturn(intBufferState);
+        when(managedState.getIntBufferState(any())).thenReturn(defaultState);
 
         logger.log(1);
 
-        verify(intBufferState, times(1)).log("1");
+        verify(defaultState, times(1)).log("1");
     }
 
     @Test
@@ -112,14 +99,14 @@ public class LoggerTest {
     @Test
     public void shouldCallMethodLogClassStateForInputParameterIsString() throws Exception {
         Logger logger = new Logger(managedState);
-        when(managedState.getStringBufferState(any())).thenReturn(stringBufferState);
+        when(managedState.getStringBufferState(any())).thenReturn(defaultState);
 
         logger.log("qqq");
         logger.log("qqq");
         logger.log("qqq");
         logger.log("qqq");
 
-        verify(stringBufferState, times(4)).log("qqq");
+        verify(defaultState, times(4)).log("qqq");
     }
 
     @Test
@@ -132,6 +119,8 @@ public class LoggerTest {
         verify(defaultState, times(1)).log("15");
         verify(defaultState, times(1)).getDecorate();
     }
+
+
 
 
     @Test
@@ -148,12 +137,12 @@ public class LoggerTest {
     @Test
     public void shouldCallMethodFlushOnceWhenCalledMethodCloseAfterLogging() throws Exception {
         Logger logger = new Logger(managedState);
-        when(managedState.getIntBufferState(any())).thenReturn(intBufferState);
+        when(managedState.getIntBufferState(any())).thenReturn(defaultState);
         logger.log(1);
 
         logger.close();
 
-        verify(intBufferState, times(1)).flush();
+        verify(defaultState, times(1)).flush();
     }
 
     private void whenConditionForUnbufferedInputParameters(String prefix, String result, String... args) throws Exception {
