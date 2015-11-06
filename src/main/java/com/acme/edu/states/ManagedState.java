@@ -1,8 +1,9 @@
 package com.acme.edu.states;
 
 import com.acme.edu.Decorate;
+import com.acme.edu.exceptions.GetStateException;
 import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
-import com.acme.edu.exceptions.PrintDataException;
+import com.acme.edu.exceptions.IncorrectInputsParametersMethodException;
 import com.acme.edu.printers.Printable;
 
 public class ManagedState {
@@ -20,23 +21,25 @@ public class ManagedState {
         this.defaultState = new UnbufferedState(printable, decorate);
     }
 
-    public State getNumberState(State currentState) throws PrintDataException {
+    public State getNumberState(State currentState) throws GetStateException {
         printBuffer(currentState, numberState);
         return numberState;
     }
 
-    public State getStringState(State currentState) throws PrintDataException {
+    public State getStringState(State currentState) throws GetStateException {
         printBuffer(currentState, stringState);
         return stringState;
     }
 
-    public State getDefaultState(State currentState) throws PrintDataException {
+    public State getDefaultState(State currentState) throws GetStateException {
         printBuffer(currentState, defaultState);
         return defaultState;
     }
 
-    private void printBuffer(State currentState, State checkedState) throws PrintDataException {
-        if (currentState != null && currentState != checkedState) {
+    private void printBuffer(State currentState, State checkedState) throws GetStateException {
+        if (currentState == null) {
+            throw new IncorrectInputsParametersMethodException("Method parameter can not be null.");
+        } else if (currentState != checkedState) {
             currentState.flush();
         }
     }
