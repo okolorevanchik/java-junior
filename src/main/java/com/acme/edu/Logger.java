@@ -137,7 +137,9 @@ public class Logger {
      * Called before the cessation of work with logger.
      */
     public void close() throws LoggerException {
-        currentState.flush();
+        if (currentState != null) {
+            currentState.flush();
+        }
     }
 
     private void printDefaultMessage(String prefix, String message) throws LoggerException {

@@ -133,7 +133,30 @@ public class LoggerTest {
         verify(defaultState, times(1)).getDecorate();
     }
 
-    private void whenConditionForUnbufferedInputParameters(String prefix, String result, String...args) throws Exception {
+
+    @Test
+    public void shouldNeverCallMethodFlushWhenCalledMethodCloseWithoutPreliminaryLogging() throws Exception {
+        Logger logger = new Logger(managedState);
+
+        logger.close();
+
+        verify(managedState, times(0)).getIntBufferState(any());
+        verify(managedState, times(0)).getStringBufferState(any());
+        verify(managedState, times(0)).getUnbufferedState(any());
+    }
+
+    @Test
+    public void shouldCallMethodFlushOnceWhenCalledMethodCloseAfterLogging() throws Exception {
+        Logger logger = new Logger(managedState);
+        when(managedState.getIntBufferState(any())).thenReturn(intBufferState);
+        logger.log(1);
+
+        logger.close();
+
+        verify(intBufferState, times(1)).flush();
+    }
+
+    private void whenConditionForUnbufferedInputParameters(String prefix, String result, String... args) throws Exception {
         when(managedState.getUnbufferedState(any())).thenReturn(defaultState);
         when(defaultState.getDecorate()).thenReturn(decorate);
         when(decorate.getDecorateString(prefix, args)).thenReturn(result);
