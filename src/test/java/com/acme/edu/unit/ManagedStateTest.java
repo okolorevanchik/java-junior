@@ -58,6 +58,7 @@ public class ManagedStateTest {
 
         State newCurrentState = managedState.getDefaultState(currentState);
         State newCurrentStateMock = mock(newCurrentState.getClass());
+        managedState.getDefaultState(newCurrentState);
 
         verify(newCurrentStateMock, times(0)).flush();
     }
