@@ -56,7 +56,6 @@ public class Logger {
     public void log(int message) throws LoggerException {
         currentState = managedState.getIntBufferState(currentState);
         currentState.log(String.valueOf(message));
-
     }
 
     /**

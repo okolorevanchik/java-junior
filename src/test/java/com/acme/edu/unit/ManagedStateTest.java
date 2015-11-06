@@ -1,15 +1,14 @@
 package com.acme.edu.unit;
 
 import com.acme.edu.Decorate;
-import com.acme.edu.exceptions.GetStateException;
 import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
 import com.acme.edu.printers.Printable;
 import com.acme.edu.states.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 public class ManagedStateTest {
 
@@ -34,11 +33,6 @@ public class ManagedStateTest {
     @Test(expected = IncorrectArgumentsConstructorException.class)
     public void shouldThrowIncorrectArgumentsConstructorExceptionWhenSecondArgumentsIsNull() throws Exception {
         new ManagedState(printable, null);
-    }
-
-    @Test(expected = GetStateException.class)
-    public void shouldThrowGetStateException() throws Exception {
-        managedState.getUnbufferedState(null);
     }
 
     @Test
