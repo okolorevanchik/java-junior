@@ -1,5 +1,6 @@
 package com.acme.edu;
 
+import com.acme.edu.exceptions.LoggerServerException;
 import com.acme.edu.exceptions.PrintDataException;
 import com.acme.edu.printers.FilePrinter;
 import com.acme.edu.printers.Printable;
@@ -33,7 +34,7 @@ public class LoggerServer {
         this.printable = new FilePrinter(CODING, PATH_TO_LOG_FILE);
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, LoggerServerException {
         LoggerServer loggerServer = new LoggerServer(11111);
         loggerServer.start();
     }
@@ -41,7 +42,7 @@ public class LoggerServer {
     /**
      * It starts the server.
      */
-    public void start() {
+    public void start() throws LoggerServerException {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             serverSocket.setSoTimeout(10000);
             while (true) {
@@ -50,11 +51,10 @@ public class LoggerServer {
                      ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream())) {
                     readingRequestFromClient(ois, oos);
                 } catch (SocketTimeoutException ignored) {
-                    System.out.println("Server is running.");
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new LoggerServerException(e);
         }
     }
 

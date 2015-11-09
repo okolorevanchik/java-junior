@@ -17,7 +17,7 @@ public class RemotePrinter implements Printable {
 
     private String address;
     private int port;
-    private List<String> buffer;
+    private List<String> buffer = new ArrayList<>();
 
     /**
      * Initializes an object to send messages to a remote server.
@@ -28,7 +28,6 @@ public class RemotePrinter implements Printable {
     public RemotePrinter(String address, int port) {
         this.address = address;
         this.port = port;
-        this.buffer = new ArrayList<>();
     }
 
     /**
