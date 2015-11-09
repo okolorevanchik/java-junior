@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,7 +51,7 @@ public class LoggerServer {
                      ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
                      ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream())) {
                     readingRequestFromClient(ois, oos);
-                } catch (SocketTimeoutException ignored) {
+                } catch (SocketTimeoutException e) {
                 }
             }
         } catch (IOException e) {
@@ -61,7 +62,7 @@ public class LoggerServer {
     private void readingRequestFromClient(ObjectInputStream ois, ObjectOutputStream oos) throws IOException {
         try {
             String send = ois.readUTF();
-            List<String> result = (List<String>) ois.readObject();
+            List<String> result = (ArrayList<String>) ois.readObject();
             for (String message : result) {
                 printable.print(message, send.equals("FLUSH"));
             }
