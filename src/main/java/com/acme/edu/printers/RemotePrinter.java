@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * RemotePrinter implements Printable
@@ -17,7 +16,7 @@ public class RemotePrinter implements Printable {
 
     private String address;
     private int port;
-    private List<String> buffer = new ArrayList<>();
+    private ArrayList<String> buffer = new ArrayList<>();
 
     /**
      * Initializes an object to send messages to a remote server.
