@@ -4,10 +4,13 @@ import com.acme.edu.exceptions.PrintDataException;
 import com.acme.edu.printers.FilePrinter;
 import com.acme.edu.printers.Printable;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.List;
 
 public class LoggerServer {
 
@@ -22,15 +25,21 @@ public class LoggerServer {
         this.printable = new FilePrinter(CODING, PATH_TO_LOG_FILE);
     }
 
+    public static void main(String[] args) throws InterruptedException {
+        LoggerServer loggerServer = new LoggerServer(11111);
+        loggerServer.start();
+    }
+
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             serverSocket.setSoTimeout(10000);
             while (true) {
                 try (Socket client = serverSocket.accept();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()))) {
-                    readingRequestFromClient(reader, writer);
+                     ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
+                     ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream())) {
+                    readingRequestFromClient(ois, oos);
                 } catch (SocketTimeoutException ignored) {
+                    System.out.println("Server is running.");
                 }
             }
         } catch (IOException e) {
@@ -38,22 +47,17 @@ public class LoggerServer {
         }
     }
 
-    private void readingRequestFromClient(BufferedReader reader, BufferedWriter writer) throws IOException {
+    private void readingRequestFromClient(ObjectInputStream ois, ObjectOutputStream oos) throws IOException {
         try {
-            String result;
-            while ((result = reader.readLine()) != null) {
-                printable.print(result, false);
+            String send = ois.readUTF();
+            List<String> result = (List<String>) ois.readObject();
+            for (String message : result) {
+                printable.print(message, send.equals("FLUSH"));
             }
-            writer.write("WRITE");
-        } catch (PrintDataException e) {
-            writer.write("ERROR");
-            writer.newLine();
-            writer.write(e.getMessage());
+            oos.writeUTF("OK");
+        } catch (PrintDataException | ClassNotFoundException e) {
+            oos.writeUTF("ERROR");
+            oos.writeObject(e);
         }
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        LoggerServer loggerServer = new LoggerServer(10000);
-        loggerServer.start();
     }
 }
