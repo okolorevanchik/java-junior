@@ -142,7 +142,7 @@ public class LoggerTest {
 
         logger.close();
 
-        verify(defaultState, times(1)).flush();
+        verify(defaultState, times(1)).flush(true);
     }
 
     private void whenConditionForUnbufferedInputParameters(String prefix, String result, String... args) throws Exception {

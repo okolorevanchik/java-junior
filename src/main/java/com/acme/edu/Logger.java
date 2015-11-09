@@ -138,7 +138,7 @@ public class Logger {
      */
     public void close() throws LoggerException {
         if (currentState != null) {
-            currentState.flush();
+            currentState.flush(true);
         }
     }
 

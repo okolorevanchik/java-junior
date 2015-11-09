@@ -15,9 +15,9 @@ public class IntBufferState extends State {
     }
 
     @Override
-    public void flush() throws PrintDataException {
+    public void flush(boolean isClosed) throws PrintDataException {
         String result = getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer));
-        printAll(result);
+        printAll(result, isClosed);
         buffer = 0;
     }
 
@@ -26,7 +26,7 @@ public class IntBufferState extends State {
         int intMessage = Integer.parseInt(message);
         if (checkOverflow(buffer + (long) intMessage)) {
             String result = getDecorate().getDecorateString(PRIMITIVE_PREFIX, String.valueOf(buffer));
-            printAll(result);
+            printAll(result, false);
             buffer = intMessage;
         } else {
             buffer += intMessage;

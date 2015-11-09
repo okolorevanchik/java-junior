@@ -39,7 +39,7 @@ public class ManagedStateTest {
     public void shouldCallMethodFlushFromCurrentStateWhenCurrentStateNotEqualNewState() throws Exception {
         managedState.getIntBufferState(currentState);
 
-        verify(currentState, times(1)).flush();
+        verify(currentState, times(1)).flush(false);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ManagedStateTest {
         State newCurrentStateMock = mock(newCurrentState.getClass());
         managedState.getUnbufferedState(newCurrentState);
 
-        verify(newCurrentStateMock, times(0)).flush();
+        verify(newCurrentStateMock, times(0)).flush(true);
     }
 
     @Test

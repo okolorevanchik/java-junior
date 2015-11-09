@@ -14,9 +14,9 @@ public abstract class State {
         this.printables = printable;
     }
 
-    protected void printAll(String message) throws PrintDataException {
+    protected void printAll(String message, boolean flush) throws PrintDataException {
         for (Printable printable: printables) {
-            printable.print(message);
+            printable.print(message, flush);
         }
     }
 
@@ -24,7 +24,7 @@ public abstract class State {
         return decorate;
     }
 
-    public void flush() throws PrintDataException {
+    public void flush(boolean isClosed) throws PrintDataException {
     }
 
     public abstract void log(String message) throws PrintDataException;

@@ -12,6 +12,6 @@ public class UnbufferedState extends State {
 
     @Override
     public void log(String message) throws PrintDataException {
-        printAll(message);
+        printAll(message, false);
     }
 }

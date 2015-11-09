@@ -18,7 +18,7 @@ public class StringBufferState extends State {
 
 
     @Override
-    public void flush() throws PrintDataException {
+    public void flush(boolean isClosed) throws PrintDataException {
         if (buffer.isEmpty()) {
             return;
         }
@@ -31,7 +31,7 @@ public class StringBufferState extends State {
         } else {
             result = getDecorate().getDecorateString(STRING_PREFIX, buffer);
         }
-        printAll(result);
+        printAll(result, isClosed);
         buffer = "";
     }
 
@@ -40,7 +40,7 @@ public class StringBufferState extends State {
         if (buffer.equals(message)) {
             count++;
         } else {
-            flush();
+            flush(false);
             buffer = message;
         }
     }

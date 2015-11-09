@@ -34,9 +34,9 @@ public class StateTest {
         state.log(String.valueOf(2));
         state.log(String.valueOf(2));
         state.log(String.valueOf(2));
-        state.flush();
+        state.flush(true);
 
-        verify(printable, times(1)).print("primitive: 6");
+        verify(printable, times(1)).print("primitive: 6", true);
     }
 
     @Test
@@ -48,27 +48,27 @@ public class StateTest {
         state.log("str2");
         state.log("str2");
         state.log("str2");
-        state.flush();
+        state.flush(true);
 
-        verify(printable, times(1)).print("string: str2 (x3)");
+        verify(printable, times(1)).print("string: str2 (x3)", true);
     }
 
     @Test
     public void shouldNotCallMethodPrintForNumber() throws Exception {
         State state = new IntBufferState(decorate, printable);
 
-        state.flush();
+        state.flush(true);
 
-        verify(printable, times(0)).print("");
+        verify(printable, times(0)).print("", true);
     }
 
     @Test
     public void shouldNotCallMethodPrintForString() throws Exception {
         State state = new StringBufferState(decorate, printable);
 
-        state.flush();
+        state.flush(true);
 
-        verify(printable, times(0)).print("");
+        verify(printable, times(0)).print("", true);
     }
 
     @Test
@@ -81,10 +81,10 @@ public class StateTest {
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
-        state.flush();
+        state.flush(false);
 
-        verify(printable, times(1)).print("primitive: " + Integer.MAX_VALUE);
-        verify(printable, times(1)).print("primitive: 10");
+        verify(printable, times(1)).print("primitive: " + Integer.MAX_VALUE, false);
+        verify(printable, times(1)).print("primitive: 10", false);
     }
 
     @Test
@@ -94,9 +94,9 @@ public class StateTest {
                 .thenReturn("primitive: " + 0);
 
         state.log(String.valueOf(0));
-        state.flush();
+        state.flush(true);
 
-        verify(printable, times(1)).print("primitive: 0");
+        verify(printable, times(1)).print("primitive: 0", true);
     }
 
     @Test
@@ -109,10 +109,10 @@ public class StateTest {
 
         state.log("10");
         state.log(String.valueOf(Integer.MAX_VALUE));
-        state.flush();
+        state.flush(true);
 
-        verify(printable, times(1)).print("string: 10");
-        verify(printable, times(1)).print("string: " + Integer.MAX_VALUE);
+        verify(printable, times(1)).print("string: 10", false);
+        verify(printable, times(1)).print("string: " + Integer.MAX_VALUE, true);
     }
 
     @Test
@@ -130,11 +130,11 @@ public class StateTest {
         state.log(String.valueOf(Integer.MIN_VALUE));
         state.log("-20");
         state.log("-100500");
-        state.flush();
+        state.flush(true);
 
-        verify(printable, times(1)).print("primitive: " + String.valueOf(-30));
-        verify(printable, times(1)).print("primitive: " + Integer.MIN_VALUE);
-        verify(printable, times(1)).print("primitive: " + String.valueOf(-100520));
+        verify(printable, times(1)).print("primitive: " + String.valueOf(-30), false);
+        verify(printable, times(1)).print("primitive: " + Integer.MIN_VALUE, false);
+        verify(printable, times(1)).print("primitive: " + String.valueOf(-100520), true);
     }
 
     @Test
@@ -146,9 +146,9 @@ public class StateTest {
         state.log(String.valueOf(Integer.MAX_VALUE - 1));
         state.log(String.valueOf(-1));
         state.log(String.valueOf(10));
-        state.flush();
+        state.flush(false);
 
-        verify(printable, times(1)).print("primitive: " + (Integer.MAX_VALUE - 2));
+        verify(printable, times(1)).print("primitive: " + (Integer.MAX_VALUE - 2), false);
     }
 
     @Test
@@ -160,8 +160,8 @@ public class StateTest {
         state.log(String.valueOf(Integer.MIN_VALUE + 1));
         state.log(String.valueOf(1));
         state.log(String.valueOf(-10));
-        state.flush();
+        state.flush(true);
 
-        verify(printable, times(1)).print("primitive: " + (Integer.MIN_VALUE + 2));
+        verify(printable, times(1)).print("primitive: " + (Integer.MIN_VALUE + 2), false);
     }
 }

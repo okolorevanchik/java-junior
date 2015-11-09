@@ -12,19 +12,21 @@ import java.util.List;
 
 public class FilePrinter implements Printable {
 
-    private static final String PATH_TO_FILE = "OutLog.txt";
-    private List<String> buffer = new ArrayList<>();
+    private String pathToLogFile;
     private String coding;
+    private List<String> buffer;
 
-    public FilePrinter(String coding) {
+    public FilePrinter(String coding, String pathToLogFile) {
         this.coding = coding;
+        this.pathToLogFile = pathToLogFile;
+        this.buffer = new ArrayList<>();
     }
 
     @Override
-    public void print(String message) throws PrintDataToFileException {
-        Path path = Paths.get(PATH_TO_FILE);
+    public void print(String message, boolean flush) throws PrintDataToFileException {
+        Path path = Paths.get(pathToLogFile);
         checkExistsFile(path);
-        if (isFullBuffer(message)) {
+        if (flush || isFullBuffer(message)) {
             writeDataToFile(path);
             buffer.clear();
         }
