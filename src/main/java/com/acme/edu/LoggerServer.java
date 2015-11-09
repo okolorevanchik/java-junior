@@ -12,6 +12,9 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
+/**
+ * Simple server logging messages coming from clients.
+ */
 public class LoggerServer {
 
     private static final String CODING = "UTF-8";
@@ -20,6 +23,11 @@ public class LoggerServer {
     private int port;
     private Printable printable;
 
+    /**
+     * Initializes the server.
+     *
+     * @param port Is the port that the server will listen.
+     */
     public LoggerServer(int port) {
         this.port = port;
         this.printable = new FilePrinter(CODING, PATH_TO_LOG_FILE);
@@ -30,6 +38,9 @@ public class LoggerServer {
         loggerServer.start();
     }
 
+    /**
+     * It starts the server.
+     */
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             serverSocket.setSoTimeout(10000);

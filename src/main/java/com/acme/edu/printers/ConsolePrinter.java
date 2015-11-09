@@ -1,13 +1,15 @@
 package com.acme.edu.printers;
 
 /**
- * @author Tolchinskiy Dmitriy
+ * Class ConsolePrinter implements Printer
  */
 public class ConsolePrinter implements Printable {
 
     /**
-     * @param message
-     * @param flush
+     * Print to console
+     *
+     * @param message Report output
+     * @param flush   Not used
      */
     @Override
     public void print(String message, boolean flush) {

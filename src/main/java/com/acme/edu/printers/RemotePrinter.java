@@ -1,6 +1,5 @@
 package com.acme.edu.printers;
 
-import com.acme.edu.exceptions.PrintDataException;
 import com.acme.edu.exceptions.PrintDataToNetworkException;
 
 import java.io.IOException;
@@ -10,20 +9,37 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * RemotePrinter implements Printable
+ * Pass to LoggerServer messages
+ */
 public class RemotePrinter implements Printable {
 
     private String address;
     private int port;
     private List<String> buffer;
 
+    /**
+     * Initializes an object to send messages to a remote server.
+     *
+     * @param address Server address
+     * @param port    Server port
+     */
     public RemotePrinter(String address, int port) {
         this.address = address;
         this.port = port;
         this.buffer = new ArrayList<>();
     }
 
+    /**
+     * Print to server messages when buffer.size() == 50 or flush
+     *
+     * @param message String
+     * @param flush   Flag forced write data from the buffer.
+     * @throws PrintDataToNetworkException
+     */
     @Override
-    public void print(String message, boolean flush) throws PrintDataException {
+    public void print(String message, boolean flush) throws PrintDataToNetworkException {
         buffer.add(message);
         if (flush || buffer.size() == 50) {
             sendDataToServer(flush ? "FLUSH" : "WRITE");

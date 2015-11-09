@@ -40,6 +40,13 @@ public class Logger {
     private ManagedState managedState;
     private State currentState;
 
+    /**
+     * Initialize the logger object.
+     * Throws an exception if incorrect input data.
+     *
+     * @param managedState Factory internal states logger. Do not be null.
+     * @throws LoggerException
+     */
     public Logger(ManagedState managedState) throws LoggerException {
         if (managedState == null) {
             throw new IncorrectArgumentsConstructorException("Constructor parameter can not be null.");

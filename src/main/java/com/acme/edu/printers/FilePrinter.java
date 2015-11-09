@@ -10,18 +10,36 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * FilePrinter implements Printable
+ * Print to file.
+ */
 public class FilePrinter implements Printable {
 
     private String pathToLogFile;
     private String coding;
     private List<String> buffer;
 
+    /**
+     * Initializes an object for writing to a file.
+     *
+     * @param coding        The encoding of the output file.
+     * @param pathToLogFile The path to the output file.
+     */
     public FilePrinter(String coding, String pathToLogFile) {
         this.coding = coding;
         this.pathToLogFile = pathToLogFile;
         this.buffer = new ArrayList<>();
     }
 
+    /**
+     * Print to file messages when buffer.size() == 50 or flush is true
+     * It creates an output file if it is not in the specified path.
+     *
+     * @param message String
+     * @param flush   Flag forced write data from the buffer.
+     * @throws PrintDataToFileException
+     */
     @Override
     public void print(String message, boolean flush) throws PrintDataToFileException {
         Path path = Paths.get(pathToLogFile);
