@@ -42,7 +42,7 @@ public class ManagedState {
     }
 
     private boolean checkNullVarargsPrintable(Printable... printables) throws IncorrectArgumentsConstructorException {
-        for (Printable printable: printables) {
+        for (Printable printable : printables) {
             if (printable == null)
                 return true;
         }

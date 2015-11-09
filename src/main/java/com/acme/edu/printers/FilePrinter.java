@@ -26,7 +26,9 @@ public class FilePrinter implements Printable {
     public void print(String message, boolean flush) throws PrintDataToFileException {
         Path path = Paths.get(pathToLogFile);
         checkExistsFile(path);
-        if (flush || isFullBuffer(message)) {
+
+        buffer.add(message);
+        if (flush || buffer.size() == 50) {
             writeDataToFile(path);
             buffer.clear();
         }
@@ -41,14 +43,10 @@ public class FilePrinter implements Printable {
                 bufferedWriter.write(s);
                 bufferedWriter.newLine();
             }
-        } catch (IOException e) {
-            throw new PrintDataToFileException("There was an error writing to file.");
-        }
-    }
 
-    private boolean isFullBuffer(String message) {
-        buffer.add(message);
-        return buffer.size() == 50;
+        } catch (IOException e) {
+            throw new PrintDataToFileException(e);
+        }
     }
 
     private void checkExistsFile(Path path) throws PrintDataToFileException {
@@ -56,7 +54,7 @@ public class FilePrinter implements Printable {
             try {
                 Files.createFile(path);
             } catch (IOException e) {
-                throw new PrintDataToFileException("There was an error creating file.");
+                throw new PrintDataToFileException(e);
             }
         }
     }

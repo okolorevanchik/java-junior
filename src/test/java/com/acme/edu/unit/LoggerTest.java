@@ -4,7 +4,8 @@ import com.acme.edu.Decorate;
 import com.acme.edu.Logger;
 import com.acme.edu.exceptions.IncorrectArgumentsConstructorException;
 import com.acme.edu.exceptions.IncorrectInputsParametersMethodException;
-import com.acme.edu.states.*;
+import com.acme.edu.states.ManagedState;
+import com.acme.edu.states.State;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -119,8 +120,6 @@ public class LoggerTest {
         verify(defaultState, times(1)).log("15");
         verify(defaultState, times(1)).getDecorate();
     }
-
-
 
 
     @Test

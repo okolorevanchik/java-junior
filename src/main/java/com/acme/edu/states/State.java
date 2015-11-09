@@ -15,7 +15,7 @@ public abstract class State {
     }
 
     protected void printAll(String message, boolean flush) throws PrintDataException {
-        for (Printable printable: printables) {
+        for (Printable printable : printables) {
             printable.print(message, flush);
         }
     }
