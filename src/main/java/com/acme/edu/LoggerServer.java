@@ -2,18 +2,13 @@ package com.acme.edu;
 
 import com.acme.edu.exceptions.LoggerServerException;
 import com.acme.edu.exceptions.PrintDataException;
-import com.acme.edu.printers.ConsolePrinter;
 import com.acme.edu.printers.FilePrinter;
 import com.acme.edu.printers.Printable;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Simple server logging messages coming from clients.
@@ -24,20 +19,21 @@ public class LoggerServer {
     private static final String PATH_TO_LOG_FILE = "ServerLog.txt";
 
     private int port;
-    private Printable printable;
+    private String coding;
+    private Printable printable = new FilePrinter(CODING, PATH_TO_LOG_FILE);
 
     /**
      * Initializes the server.
      *
      * @param port Is the port that the server will listen.
      */
-    public LoggerServer(int port) {
+    public LoggerServer(int port, String coding) {
         this.port = port;
-        this.printable = new FilePrinter(CODING, PATH_TO_LOG_FILE);
+        this.coding = coding;
     }
 
     public static void main(String[] args) throws LoggerServerException {
-        LoggerServer loggerServer = new LoggerServer(11111);
+        LoggerServer loggerServer = new LoggerServer(11111, "UTF-8");
         loggerServer.start();
     }
 
@@ -45,34 +41,47 @@ public class LoggerServer {
      * It starts the server.
      */
     public void start() throws LoggerServerException {
-        Printable console = new ConsolePrinter();
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            serverSocket.setSoTimeout(10000);
+            serverSocket.setSoTimeout(20000);
             while (true) {
                 try (Socket client = serverSocket.accept();
-                     ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
-                     ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream())) {
-                    readingRequestFromClient(ois, oos);
+                     BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream(), coding));
+                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
+
+                    readingRequestFromClient(reader, writer);
                 } catch (SocketTimeoutException e) {
-                    console.print("Server is running.", false);
+                    break;
                 }
             }
-        } catch (IOException | PrintDataException e) {
+        } catch (IOException e) {
             throw new LoggerServerException(e);
         }
     }
 
-    private void readingRequestFromClient(ObjectInputStream ois, ObjectOutputStream oos) throws IOException {
+    private void readingRequestFromClient(BufferedReader reader, BufferedWriter writer) throws IOException {
         try {
-            String send = ois.readUTF();
-            List<String> result = (ArrayList<String>) ois.readObject();
-            for (String message : result) {
-                printable.print(message, send.equals("FLUSH"));
+            String send = getResponse(reader);
+            String message = getResponse(reader);
+            printable.print(message, send.equals("FLUSH"));
+            sendResponse(writer, "OK");
+        } catch (PrintDataException e) {
+            sendResponse(writer, "ERROR");
+            sendResponse(writer, e.getMessage());
+        }
+    }
+
+    private void sendResponse(BufferedWriter writer, String ok) throws IOException {
+        writer.write(ok);
+        writer.newLine();
+        writer.flush();
+    }
+
+    private String getResponse(BufferedReader reader) throws IOException {
+        while (true) {
+            String result;
+            if (reader.ready() && (result = reader.readLine()) != null) {
+                return result;
             }
-            oos.writeUTF("OK");
-        } catch (PrintDataException | ClassNotFoundException e) {
-            oos.writeUTF("ERROR");
-            oos.writeObject(e);
         }
     }
 }

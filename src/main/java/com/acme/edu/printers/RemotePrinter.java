@@ -1,13 +1,10 @@
 package com.acme.edu.printers;
 
+import com.acme.edu.exceptions.PrintDataException;
 import com.acme.edu.exceptions.PrintDataToNetworkException;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * RemotePrinter implements Printable
@@ -17,17 +14,28 @@ public class RemotePrinter implements Printable {
 
     private String address;
     private int port;
-    private List<String> buffer = new ArrayList<>();
+    private String coding;
 
     /**
      * Initializes an object to send messages to a remote server.
      *
      * @param address Server address
      * @param port    Server port
+     * @param coding  Message Encoding
      */
-    public RemotePrinter(String address, int port) {
+    public RemotePrinter(String address, int port, String coding) {
         this.address = address;
         this.port = port;
+        this.coding = coding;
+    }
+
+    public static void main(String[] args) throws PrintDataException {
+        Printable printable = new RemotePrinter("localhost", 11111, "UTF-8");
+
+        for (int i = 0; i < 1000; i++) {
+            printable.print(String.valueOf(i), false);
+        }
+        printable.print(String.valueOf(100500), true);
     }
 
     /**
@@ -39,26 +47,35 @@ public class RemotePrinter implements Printable {
      */
     @Override
     public void print(String message, boolean flush) throws PrintDataToNetworkException {
-        buffer.add(message);
-        if (flush || buffer.size() == 50) {
-            sendDataToServer(flush ? "FLUSH" : "WRITE");
-            buffer.clear();
+        sendDataToServer(message, flush ? "FLUSH" : "WRITE");
+    }
+
+    private void sendDataToServer(String message, String send) throws PrintDataToNetworkException {
+        try (Socket socket = new Socket(address, port);
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), coding));
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), coding))) {
+
+            sendMessage(send, writer);
+            sendMessage(message, writer);
+            readResponseFromServer(reader);
+        } catch (IOException e) {
+            throw new PrintDataToNetworkException(e);
         }
     }
 
-    private void sendDataToServer(String send) throws PrintDataToNetworkException {
-        try (Socket socket = new Socket(address, port);
-             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+    private void sendMessage(String send, BufferedWriter writer) throws IOException {
+        writer.write(send);
+        writer.newLine();
+        writer.flush();
+    }
 
-            oos.writeUTF(send);
-            oos.writeObject(buffer);
-            if (ois.readUTF().equals("ERROR")) {
-                Exception e = (Exception) ois.readObject();
-                throw new PrintDataToNetworkException(e);
+    private void readResponseFromServer(BufferedReader reader) throws IOException, PrintDataToNetworkException {
+        while (true) {
+            if (reader.ready()) {
+                if (reader.readLine().equals("ERROR")) {
+                    throw new PrintDataToNetworkException(reader.readLine());
+                } else break;
             }
-        } catch (IOException | ClassNotFoundException e) {
-            throw new PrintDataToNetworkException(e);
         }
     }
 }

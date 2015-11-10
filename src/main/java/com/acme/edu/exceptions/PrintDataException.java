@@ -13,4 +13,8 @@ public class PrintDataException extends LoggerException {
     public PrintDataException(Exception e) {
         super(e);
     }
+
+    public PrintDataException(String s) {
+        super(s);
+    }
 }
