@@ -1,6 +1,5 @@
 package com.acme.edu.printers;
 
-import com.acme.edu.exceptions.PrintDataException;
 import com.acme.edu.exceptions.PrintDataToNetworkException;
 
 import java.io.*;
@@ -27,15 +26,6 @@ public class RemotePrinter implements Printable {
         this.address = address;
         this.port = port;
         this.coding = coding;
-    }
-
-    public static void main(String[] args) throws PrintDataException {
-        Printable printable = new RemotePrinter("localhost", 11111, "UTF-8");
-
-        for (int i = 0; i < 1000; i++) {
-            printable.print(String.valueOf(i), false);
-        }
-        printable.print(String.valueOf(100500), true);
     }
 
     /**

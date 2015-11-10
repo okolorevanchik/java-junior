@@ -15,21 +15,22 @@ import java.net.SocketTimeoutException;
  */
 public class LoggerServer {
 
-    private static final String CODING = "UTF-8";
     private static final String PATH_TO_LOG_FILE = "ServerLog.txt";
 
     private int port;
     private String coding;
-    private Printable printable = new FilePrinter(CODING, PATH_TO_LOG_FILE);
+    private Printable printable;
 
     /**
      * Initializes the server.
      *
-     * @param port Is the port that the server will listen.
+     * @param port   Is the port that the server will listen.
+     * @param coding Encoding data storage
      */
     public LoggerServer(int port, String coding) {
         this.port = port;
         this.coding = coding;
+        this.printable = new FilePrinter(coding, PATH_TO_LOG_FILE);
     }
 
     public static void main(String[] args) throws LoggerServerException {
