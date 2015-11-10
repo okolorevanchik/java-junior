@@ -62,7 +62,7 @@ public class RemotePrinter implements Printable {
     private void readResponseFromServer(BufferedReader reader) throws IOException, PrintDataToNetworkException {
         while (true) {
             if (reader.ready()) {
-                if (reader.readLine().equals("ERROR")) {
+                if ("ERROR".equals(reader.readLine())) {
                     throw new PrintDataToNetworkException(reader.readLine());
                 } else break;
             }

@@ -65,7 +65,7 @@ public class LoggerServer {
         try {
             String send = getResponse(reader);
             String message = getResponse(reader);
-            printable.print(message, send.equals("FLUSH"));
+            printable.print(message, "FLUSH".equals(send));
             sendResponse(writer, "OK");
         } catch (PrintDataException e) {
             sendResponse(writer, "ERROR");
