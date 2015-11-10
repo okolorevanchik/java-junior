@@ -52,6 +52,8 @@ public class LoggerServer {
                     readingRequestFromClient(reader, writer);
                 } catch (SocketTimeoutException e) {
                     break;
+                } catch (IOException e) {
+                    throw new LoggerServerException(e);
                 }
             }
         } catch (IOException e) {
