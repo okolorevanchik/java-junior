@@ -2,7 +2,6 @@ package com.acme.edu.server;
 
 import com.acme.edu.exceptions.LoggerServerException;
 import com.acme.edu.exceptions.PrintDataException;
-import com.acme.edu.printers.FilePrinter;
 import com.acme.edu.printers.Printable;
 
 import java.io.*;
@@ -30,6 +29,7 @@ public class LoggerServer {
 
     /**
      * Initializes the server.
+     * Creating object
      *
      * @param port   Is the port that the server will listen.
      * @param coding Encoding data storage
@@ -37,7 +37,7 @@ public class LoggerServer {
     public LoggerServer(int port, String coding) {
         this.port = port;
         this.coding = coding;
-        this.printable = new FilePrinter(coding, PATH_TO_LOG_FILE);
+        this.printable = new ServerFilePrinter(coding, PATH_TO_LOG_FILE);
     }
 
     public static void main(String[] args) throws LoggerServerException, InterruptedException {

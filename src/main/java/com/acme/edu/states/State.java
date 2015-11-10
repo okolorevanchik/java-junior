@@ -23,12 +23,6 @@ public abstract class State {
         this.printables = printable;
     }
 
-    protected void printAll(String message, boolean flush) throws PrintDataException {
-        for (Printable printable : printables) {
-            printable.print(message, flush);
-        }
-    }
-
     /**
      * Returns the current state of the decorator.
      *
@@ -54,4 +48,10 @@ public abstract class State {
      * @throws PrintDataException
      */
     public abstract void log(String message) throws PrintDataException;
+
+    protected void printAll(String message, boolean flush) throws PrintDataException {
+        for (Printable printable : printables) {
+            printable.print(message, flush);
+        }
+    }
 }
