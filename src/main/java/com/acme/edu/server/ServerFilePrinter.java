@@ -45,7 +45,7 @@ public class ServerFilePrinter implements Printable {
      * @throws PrintDataToFileException
      */
     @Override
-    public void print(String message, boolean flush) throws PrintDataException {
+    public synchronized void print(String message, boolean flush) throws PrintDataException {
         Path path = Paths.get(pathToLogFile);
         checkExistsFile(path);
 
