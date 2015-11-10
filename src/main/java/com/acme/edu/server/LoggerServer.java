@@ -9,7 +9,9 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.concurrent.Executor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -17,12 +19,14 @@ import java.util.concurrent.Executors;
  */
 public class LoggerServer {
 
-    private static final String PATH_TO_LOG_FILE = "ServerLog.txt";
-    private static final Executor THREAD_POOL = Executors.newWorkStealingPool();
+    private static final String PATH_TO_LOG_FILE = "ServerLogTeam13.txt";
+    private static final ExecutorService THREAD_POOL = Executors.newWorkStealingPool();
 
     private int port;
     private String coding;
     private Printable printable;
+    private Thread server;
+    private List<Socket> openSockets = new ArrayList<>();
 
     /**
      * Initializes the server.
@@ -36,34 +40,72 @@ public class LoggerServer {
         this.printable = new FilePrinter(coding, PATH_TO_LOG_FILE);
     }
 
-    public static void main(String[] args) throws LoggerServerException {
+    public static void main(String[] args) throws LoggerServerException, InterruptedException {
         LoggerServer loggerServer = new LoggerServer(11111, "UTF-8");
         loggerServer.start();
+        Thread.sleep(10000);
+        loggerServer.stop();
     }
 
     /**
      * It starts the server.
      */
     public void start() throws LoggerServerException {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            serverSocket.setSoTimeout(20000);
-            while (true) {
-                try {
-                    Socket client = serverSocket.accept();
-                    THREAD_POOL.execute(() -> {
-                        try(BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream(), coding));
-                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
-                            readingRequestFromClient(reader, writer);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } catch (SocketTimeoutException e) {
-                    break;
-                }
+        server = new Thread(() -> {
+            try (ServerSocket serverSocket = new ServerSocket(port)) {
+                serverSocket.setSoTimeout(1000);
+                jobServer(serverSocket);
+            } catch (IOException e) {
+                THREAD_POOL.shutdown();
             }
-        } catch (IOException e) {
-            throw new LoggerServerException(e);
+        });
+        server.start();
+    }
+
+    private void jobServer(ServerSocket serverSocket) throws IOException {
+        while (true) {
+            try {
+                workWithClient(serverSocket);
+            } catch (SocketTimeoutException ignored){
+                if (isStop())
+                    break;
+            }
+        }
+    }
+
+    private void workWithClient(ServerSocket serverSocket) throws IOException {
+        Socket client = serverSocket.accept();
+        openSockets.add(client);
+        THREAD_POOL.execute(() -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream(), coding));
+                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
+                readingRequestFromClient(reader, writer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private boolean isStop() throws IOException {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            closeSockets();
+            THREAD_POOL.shutdown();
+            return true;
+        }
+        return false;
+    }
+
+    public void stop() {
+        server.interrupt();
+    }
+
+    private void closeSockets() throws IOException {
+        for (Socket socket : openSockets) {
+            if (!socket.isClosed()) {
+                socket.close();
+            }
         }
     }
 

@@ -16,9 +16,11 @@ import java.util.List;
  */
 public class FilePrinter implements Printable {
 
+    private static final String SUBSTRING_FOR_SORTING = "ERROR";
+
     private String pathToLogFile;
     private String coding;
-    private List<String> buffer;
+    private List<String> buffer = new ArrayList<>();
 
     /**
      * Initializes an object for writing to a file.
@@ -29,7 +31,6 @@ public class FilePrinter implements Printable {
     public FilePrinter(String coding, String pathToLogFile) {
         this.coding = coding;
         this.pathToLogFile = pathToLogFile;
-        this.buffer = new ArrayList<>();
     }
 
     /**
@@ -55,9 +56,9 @@ public class FilePrinter implements Printable {
 
     private void sortList() {
         buffer.sort((o1, o2) -> {
-            if (o1.contains("ERROR") && o2.contains("ERROR"))
+            if (o1.contains(SUBSTRING_FOR_SORTING) && o2.contains(SUBSTRING_FOR_SORTING))
                 return 0;
-            else if (o1.contains("ERROR") && !o2.contains("ERROR"))
+            else if (o1.contains(SUBSTRING_FOR_SORTING) && !o2.contains(SUBSTRING_FOR_SORTING))
                 return 1;
             else return -1;
         });
