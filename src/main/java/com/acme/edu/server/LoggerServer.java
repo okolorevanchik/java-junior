@@ -1,4 +1,4 @@
-package com.acme.edu;
+package com.acme.edu.server;
 
 import com.acme.edu.exceptions.LoggerServerException;
 import com.acme.edu.exceptions.PrintDataException;
@@ -9,6 +9,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Simple server logging messages coming from clients.
@@ -16,6 +18,7 @@ import java.net.SocketTimeoutException;
 public class LoggerServer {
 
     private static final String PATH_TO_LOG_FILE = "ServerLog.txt";
+    private static final Executor THREAD_POOL = Executors.newWorkStealingPool();
 
     private int port;
     private String coding;
@@ -45,15 +48,18 @@ public class LoggerServer {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             serverSocket.setSoTimeout(20000);
             while (true) {
-                try (Socket client = serverSocket.accept();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream(), coding));
-                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
-
-                    readingRequestFromClient(reader, writer);
+                try {
+                    Socket client = serverSocket.accept();
+                    THREAD_POOL.execute(() -> {
+                        try(BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream(), coding));
+                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
+                            readingRequestFromClient(reader, writer);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 } catch (SocketTimeoutException e) {
                     break;
-                } catch (IOException e) {
-                    throw new LoggerServerException(e);
                 }
             }
         } catch (IOException e) {
