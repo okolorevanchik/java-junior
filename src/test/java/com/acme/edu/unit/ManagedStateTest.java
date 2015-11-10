@@ -31,6 +31,11 @@ public class ManagedStateTest {
     }
 
     @Test(expected = IncorrectArgumentsConstructorException.class)
+    public void shouldThrowIncorrectArgumentsConstructorExceptionWhenOnOfArgumentsPrintableIsNull() throws Exception {
+        new ManagedState(decorate, printable, null, printable);
+    }
+
+    @Test(expected = IncorrectArgumentsConstructorException.class)
     public void shouldThrowIncorrectArgumentsConstructorExceptionWhenSecondArgumentsIsNull() throws Exception {
         new ManagedState(null, printable);
     }
