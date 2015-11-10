@@ -47,9 +47,20 @@ public class FilePrinter implements Printable {
 
         buffer.add(message);
         if (flush || buffer.size() == 50) {
+            sortList();
             writeDataToFile(path);
             buffer.clear();
         }
+    }
+
+    private void sortList() {
+        buffer.sort((o1, o2) -> {
+            if (o1.contains("ERROR") && o2.contains("ERROR"))
+                return 0;
+            else if (o1.contains("ERROR") && !o2.contains("ERROR"))
+                return 1;
+            else return -1;
+        });
     }
 
     private void writeDataToFile(Path path) throws PrintDataToFileException {
