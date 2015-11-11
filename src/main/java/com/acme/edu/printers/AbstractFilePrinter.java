@@ -63,15 +63,15 @@ public abstract class AbstractFilePrinter implements Printable {
     protected abstract void flushesFile() throws PrintDataToFileException;
 
     private Path checkExistsFile(String pathToLogFile) throws PrintDataToFileException {
-        Path path = Paths.get(pathToLogFile);
-        if (!Files.isRegularFile(path)) {
+        Path resultPath = Paths.get(pathToLogFile);
+        if (!Files.isRegularFile(resultPath)) {
             try {
-                Files.createFile(path);
+                Files.createFile(resultPath);
             } catch (IOException e) {
                 throw new PrintDataToFileException(e);
             }
         }
-        return path;
+        return resultPath;
     }
 
 }

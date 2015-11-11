@@ -63,7 +63,8 @@ public class LoggerServer {
             try (ServerSocket serverSocket = new ServerSocket(port)) {
                 serverSocket.setSoTimeout(1000);
                 jobServer(serverSocket);
-            } catch (IOException ignored) {
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         server.start();
@@ -80,7 +81,7 @@ public class LoggerServer {
         while (true) {
             try {
                 startWorkWithClient(serverSocket);
-            } catch (SocketTimeoutException ignored) {
+            } catch (SocketTimeoutException e) {
                 if (isStop()) {
                     break;
                 }
@@ -100,7 +101,7 @@ public class LoggerServer {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream(), coding));
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
             readingRequestFromClient(reader, writer);
-        } catch (IOException ignored) {
+        } catch (IOException e) {
             lock.writeLock().lock();
             openSockets.remove(client);
             lock.writeLock().lock();
