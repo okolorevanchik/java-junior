@@ -2,6 +2,7 @@ package com.acme.edu.server;
 
 import com.acme.edu.exceptions.LoggerServerException;
 import com.acme.edu.exceptions.PrintDataException;
+import com.acme.edu.exceptions.PrintDataToFileException;
 import com.acme.edu.printers.Printable;
 
 import java.io.*;
@@ -34,10 +35,14 @@ public class LoggerServer {
      * @param port   Is the port that the server will listen.
      * @param coding Encoding data storage
      */
-    public LoggerServer(int port, String coding) {
-        this.port = port;
-        this.coding = coding;
-        this.printable = new ServerFilePrinter(coding, PATH_TO_LOG_FILE);
+    public LoggerServer(int port, String coding) throws LoggerServerException {
+        try {
+            this.port = port;
+            this.coding = coding;
+            this.printable = new ServerFilePrinter(coding, PATH_TO_LOG_FILE);
+        } catch (PrintDataToFileException e) {
+            throw new LoggerServerException(e);
+        }
     }
 
     public static void main(String[] args) throws LoggerServerException, InterruptedException {
@@ -55,7 +60,7 @@ public class LoggerServer {
             try (ServerSocket serverSocket = new ServerSocket(port)) {
                 serverSocket.setSoTimeout(1000);
                 jobServer(serverSocket);
-            } catch (IOException e) {
+            } catch (IOException ignored) {
                 THREAD_POOL.shutdown();
             }
         });
@@ -72,25 +77,27 @@ public class LoggerServer {
     private void jobServer(ServerSocket serverSocket) throws IOException {
         while (true) {
             try {
-                workWithClient(serverSocket);
+                startWorkWithClient(serverSocket);
             } catch (SocketTimeoutException ignored){
-                if (isStop())
+                if (isStop()) {
                     break;
+                }
             }
         }
     }
 
-    private void workWithClient(ServerSocket serverSocket) throws IOException {
+    private void startWorkWithClient(ServerSocket serverSocket) throws IOException {
         Socket client = serverSocket.accept();
         openSockets.add(client);
-        THREAD_POOL.execute(() -> {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream(), coding));
-                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
-                readingRequestFromClient(reader, writer);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        THREAD_POOL.execute(() -> workWithClient(client));
+    }
+
+    private void workWithClient(Socket client) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream(), coding));
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
+            readingRequestFromClient(reader, writer);
+        } catch (IOException ignored) {
+        }
     }
 
     private boolean isStop() throws IOException {
