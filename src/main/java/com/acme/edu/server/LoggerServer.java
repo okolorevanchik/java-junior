@@ -9,10 +9,12 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Simple server logging messages coming from clients.
@@ -26,7 +28,8 @@ public class LoggerServer {
     private String coding;
     private Printable printable;
     private Thread server;
-    private List<Socket> openSockets = new ArrayList<>();
+    private Collection<Socket> openSockets = new LinkedList<>();
+    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     /**
      * Initializes the server.
@@ -61,7 +64,6 @@ public class LoggerServer {
                 serverSocket.setSoTimeout(1000);
                 jobServer(serverSocket);
             } catch (IOException ignored) {
-                THREAD_POOL.shutdown();
             }
         });
         server.start();
@@ -78,7 +80,7 @@ public class LoggerServer {
         while (true) {
             try {
                 startWorkWithClient(serverSocket);
-            } catch (SocketTimeoutException ignored){
+            } catch (SocketTimeoutException ignored) {
                 if (isStop()) {
                     break;
                 }
@@ -88,7 +90,9 @@ public class LoggerServer {
 
     private void startWorkWithClient(ServerSocket serverSocket) throws IOException {
         Socket client = serverSocket.accept();
+        lock.writeLock().lock();
         openSockets.add(client);
+        lock.writeLock().unlock();
         THREAD_POOL.execute(() -> workWithClient(client));
     }
 
@@ -97,6 +101,9 @@ public class LoggerServer {
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), coding))) {
             readingRequestFromClient(reader, writer);
         } catch (IOException ignored) {
+            lock.writeLock().lock();
+            openSockets.remove(client);
+            lock.writeLock().lock();
         }
     }
 
@@ -112,11 +119,13 @@ public class LoggerServer {
     }
 
     private void closeSockets() throws IOException {
+        lock.readLock().lock();
         for (Socket socket : openSockets) {
             if (!socket.isClosed()) {
                 socket.close();
             }
         }
+        lock.writeLock().unlock();
     }
 
     private void readingRequestFromClient(BufferedReader reader, BufferedWriter writer) throws IOException {
