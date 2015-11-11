@@ -14,7 +14,12 @@ public class PrintDataToNetworkException extends PrintDataException {
         super(e);
     }
 
-    public PrintDataToNetworkException(String s) {
-        super(s);
+    /**
+     * Initializes an exception
+     *
+     * @param message Error message
+     */
+    public PrintDataToNetworkException(String message) {
+        super(message);
     }
 }

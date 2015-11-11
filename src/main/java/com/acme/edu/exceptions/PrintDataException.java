@@ -14,7 +14,12 @@ public class PrintDataException extends LoggerException {
         super(e);
     }
 
-    public PrintDataException(String s) {
-        super(s);
+    /**
+     * Initializes an exception
+     *
+     * @param message Error message
+     */
+    public PrintDataException(String message) {
+        super(message);
     }
 }
