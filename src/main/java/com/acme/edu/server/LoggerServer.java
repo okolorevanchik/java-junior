@@ -57,6 +57,8 @@ public class LoggerServer {
 
     /**
      * It starts the server.
+     *
+     * @throws LoggerServerException
      */
     public void start() throws LoggerServerException {
         server = new Thread(() -> {

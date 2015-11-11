@@ -29,7 +29,7 @@ public abstract class AbstractFilePrinter implements Printable {
      *
      * @param message String
      * @param flush   Flag forced write data from the buffer.
-     * @throws PrintDataToFileException
+     * @throws PrintDataException
      */
     @Override
     public void print(String message, boolean flush) throws PrintDataException {
