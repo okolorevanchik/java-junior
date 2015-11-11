@@ -62,6 +62,13 @@ public class LoggerServer {
         server.start();
     }
 
+    /**
+     * Stops the server.
+     */
+    public void stop() {
+        server.interrupt();
+    }
+
     private void jobServer(ServerSocket serverSocket) throws IOException {
         while (true) {
             try {
@@ -95,10 +102,6 @@ public class LoggerServer {
             return true;
         }
         return false;
-    }
-
-    public void stop() {
-        server.interrupt();
     }
 
     private void closeSockets() throws IOException {

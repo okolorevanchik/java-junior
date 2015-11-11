@@ -22,7 +22,7 @@ public class ServerFilePrinter implements Printable {
 
     private String pathToLogFile;
     private String coding;
-    private List<String> buffer = new ArrayList<>();
+    private final List<String> buffer = new ArrayList<>();
 
     /**
      * Initializes an object for writing to a file on server.
@@ -45,15 +45,17 @@ public class ServerFilePrinter implements Printable {
      * @throws PrintDataToFileException
      */
     @Override
-    public synchronized void print(String message, boolean flush) throws PrintDataException {
-        Path path = Paths.get(pathToLogFile);
-        checkExistsFile(path);
+    public void print(String message, boolean flush) throws PrintDataException {
+        synchronized (buffer) {
+            Path path = Paths.get(pathToLogFile);
+            checkExistsFile(path);
 
-        buffer.add(message);
-        if (flush || buffer.size() == 50) {
-            sortList();
-            writeDataToFile(path);
-            buffer.clear();
+            buffer.add(message);
+            if (flush || buffer.size() == 50) {
+                sortList();
+                writeDataToFile(path);
+                buffer.clear();
+            }
         }
     }
 
