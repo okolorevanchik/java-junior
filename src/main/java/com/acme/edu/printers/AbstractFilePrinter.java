@@ -25,7 +25,8 @@ public abstract class AbstractFilePrinter implements Printable {
     /**
      * Print to file messages when buffer.size() == 50 or flush is true
      * It creates an output file if it is not in the specified path.
-     * Sort buffer before output to a file by keyword ERROR.
+     * Sort buffer before output to a file by keyword ERROR
+     * (if you have a realization of ServerFilePrinter).
      *
      * @param message String
      * @param flush   Flag forced write data from the buffer.
